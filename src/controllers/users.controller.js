@@ -27,7 +27,7 @@ async function createUser(req, res){
   try {
     const newUser = new UsersModel(req.body);
     const user = await newUser.save()
-    res.json([user, progress])
+    res.json(user)
   } catch (error) {
     res.status(500).json({ error })
   }
