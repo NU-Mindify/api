@@ -22,7 +22,14 @@ async function getWebUser(req, res) {
   }
 }
 
+const updateWebUsers = (req,res) => {
+  WebUsersModel.findByIdAndUpdate(req.params.id, req.body, {new:true})
+   .then(webuser => res.json(webuser))
+   .catch(err =>{
+      console.log(err);
+      res.status(500).json({error:"Internal Server Error"});
+   });
+}
 
 
-
-module.exports = {getWebUsers , getWebUser}
+module.exports = {getWebUsers , getWebUser, updateWebUsers}

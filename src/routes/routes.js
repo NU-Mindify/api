@@ -36,5 +36,6 @@ router.patch('/updateQuestion', questions.updateQuestion)
 //web routes
 router.get('/getWebUsers', webusers.getWebUsers);
 router.get('/getWebUser/:uid', webusers.getWebUser);
+router.put('/updateWebUsers/:id', webusers.updateWebUsers)
 
 module.exports = router;
