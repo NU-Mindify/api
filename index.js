@@ -28,7 +28,6 @@ app.use('/api/', userRoutes);
 const connectMongoose = async () => {
   try {
     await mongoose.connect(uri, clientOptions);
-    
     console.log("Connected to MongoDB!");
   } catch (err) {
     console.error(err);
