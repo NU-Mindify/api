@@ -6,6 +6,8 @@ const progress = require('../controllers/progress.controller')
 const chats = require('../controllers/chats.controller')
 const questions = require('../controllers/questions.controller')
 
+const webusers = require('../controllers/web/webuser.controller')
+
 router.get('/', (req, res) => res.send(`
   <title>NU Mindify API</title>
   <h1>NU Mindify API</h1>
@@ -17,6 +19,8 @@ router.get('/getUsers', users.getUsers);
 router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
+
+router.get('/getWebUsers', webusers.getWebUsers);
 
 router.get('/getTerms', terms.getTerms)
 router.post('/addTerm', terms.addTerm)
