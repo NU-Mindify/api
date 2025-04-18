@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const WebUsersSchema = new mongoose.Schema({
-  firstname: {
+  uid: {
     type: String,
     required:true
   },
-  lastname: {
+  firstName: {
+    type: String,
+    required:true
+  },
+  lastName: {
     type: Number,
     required: true,
     unique: true,
