@@ -20,8 +20,6 @@ router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
 
-router.get('/getWebUsers', webusers.getWebUsers);
-
 router.get('/getTerms', terms.getTerms)
 router.post('/addTerm', terms.addTerm)
 
@@ -35,5 +33,8 @@ router.get('/getQuestions', questions.getQuestions)
 router.post('/addQuestion', questions.addQuestion)
 router.patch('/updateQuestion', questions.updateQuestion)
 
+//web routes
+router.get('/getWebUsers', webusers.getWebUsers);
+router.get('/getWebUser/:uid', webusers.getWebUser);
 
 module.exports = router;
