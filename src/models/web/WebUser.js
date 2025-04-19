@@ -28,6 +28,10 @@ const WebUsersSchema = new mongoose.Schema({
   position: {
     type: String,
     required: true
+  },
+  useravatar: {
+    type: String,
+    required: true
   }
 })
 
