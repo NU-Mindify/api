@@ -24,6 +24,7 @@ router.get('/getWebUsers', webusers.getWebUsers);
 
 router.get('/getTerms', terms.getTerms)
 router.post('/addTerm', terms.addTerm)
+router.patch('/updateTerm', terms.updateTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.post('/progressCategory', progress.progressCategory)
