@@ -23,4 +23,17 @@ async function addTerm(req, res) {
   }
 }
 
-module.exports = { getTerms, addTerm }
+async function updateTerm(req, res) {
+  try {
+    const update = await TermsModel.updateMany(
+      {},
+      { $set: {word: "", meaning: ""}}
+    );
+    
+    res.json(update);
+  } catch (error) {
+    res.status(422).json({ message: error.message })
+  }
+}
+
+module.exports = { getTerms, addTerm, updateTerm }
