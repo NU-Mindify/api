@@ -25,15 +25,17 @@ async function addTerm(req, res) {
 
 async function updateTerm(req, res) {
   try {
-    const update = await TermsModel.updateMany(
-      {},
-      { $set: {word: "", meaning: ""}}
-    );
-    
-    res.json(update);
+    const { term_id, word, meaning } = req.body
+    const updatedTerm = await TermsModel.findByIdAndUpdate(
+      term_id,
+      { $set: { word, meaning }},
+      { new: true, runValidators: true }
+    )
+    console.log("UpdateTerm:", updatedTerm);
+    res.json( updatedTerm )
   } catch (error) {
-    res.status(422).json({ message: error.message })
+    console.error("Error updating term:", error);
+    res.status(500).json({ error: error.message });
   }
 }
-
 module.exports = { getTerms, addTerm, updateTerm }
