@@ -9,14 +9,14 @@ const termsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tags: {
+  tags:{
     type: Array,
-    default: []
+    required: true,
   },
-  is_deleted: {
-    type: Boolean,
-    default: false
-  }
+  is_deleted: { 
+    type: Boolean, 
+    default: false,
+  },
 })
 
 const TermsModel = mongoose.model("terms", termsSchema)

@@ -25,10 +25,10 @@ async function addTerm(req, res) {
 
 async function updateTerm(req, res) {
   try {
-    const { term_id, word, meaning } = req.body
+    const { term_id, word, meaning, tags } = req.body
     const updatedTerm = await TermsModel.findByIdAndUpdate(
       term_id,
-      { $set: { word, meaning }},
+      { $set: { word, meaning, tags }},
       { new: true, runValidators: true }
     )
     console.log("UpdateTerm:", updatedTerm);
@@ -38,4 +38,23 @@ async function updateTerm(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-module.exports = { getTerms, addTerm, updateTerm }
+
+async function deleteTerm(req, res) {
+  try {
+    const { term_id, is_deleted } = req.body
+    const deletedTerm = await TermsModel.findByIdAndUpdate(
+      term_id,
+      { $set: { is_deleted }},
+      { new: true, runValidators: true }
+    )
+    console.log("DeleteTerm:", deletedTerm);
+    res.json( deletedTerm )
+  } catch (error) {
+    console.error("Error updating term:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+
+module.exports = { getTerms, addTerm, updateTerm, deleteTerm }
