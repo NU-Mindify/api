@@ -31,5 +31,15 @@ const updateWebUsers = (req,res) => {
    });
 }
 
+const createWebUser = (req, res) => {
+  const newWebUser = new WebUsersModel(req.body);
+  newWebUser.save()
+   .then(webuser => res.json(webuser))
+   .catch(err=>{
+    console.log(err);
+    res.status(500).json({error:"Internal Server Error"})
+   })
+}
 
-module.exports = {getWebUsers , getWebUser, updateWebUsers}
+
+module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser }
