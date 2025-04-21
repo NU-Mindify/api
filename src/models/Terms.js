@@ -10,7 +10,7 @@ const termsSchema = new mongoose.Schema({
     required: true,
   },
   tags:{
-    type:Array,
+    type: Array,
     required: true,
   },
   is_deleted: { 
