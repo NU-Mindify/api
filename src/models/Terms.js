@@ -8,7 +8,15 @@ const termsSchema = new mongoose.Schema({
   meaning: {
     type: String,
     required: true,
-  }
+  },
+  tags:{
+    type:String,
+    required: true,
+  },
+  is_deleted: { 
+    type: Boolean, 
+    default: false,
+  },
 })
 
 const TermsModel = mongoose.model("terms", termsSchema)

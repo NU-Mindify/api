@@ -23,6 +23,7 @@ router.post('/updateUser', users.updateUser);
 router.get('/getTerms', terms.getTerms)
 router.post('/addTerm', terms.addTerm)
 router.put('/updateTerm/:id', terms.updateTerm)
+router.put('/deleteTerm/:id', terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.post('/progressCategory', progress.progressCategory)
