@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 
 const WebUsersSchema = new mongoose.Schema({
-  firstname: {
+  uid: {
     type: String,
     required:true
   },
-  lastname: {
-    type: Number,
+  firstName: {
+    type: String,
+    required:true
+  },
+  lastName: {
+    type: String,
     required: true,
-    unique: true,
   },
   branch: {
     type: String,
@@ -23,6 +26,10 @@ const WebUsersSchema = new mongoose.Schema({
     required: true
   },
   position: {
+    type: String,
+    required: true
+  },
+  useravatar: {
     type: String,
     required: true
   }

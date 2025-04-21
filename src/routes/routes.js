@@ -23,6 +23,7 @@ router.post('/updateUser', users.updateUser);
 
 router.get('/getTerms', terms.getTerms)
 router.post('/addTerm', terms.addTerm)
+router.put('/updateTerm/:id', terms.updateTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.post('/progressCategory', progress.progressCategory)
@@ -39,5 +40,9 @@ router.post('/addAttempt', attempts.addAttempt)
 
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
+router.get('/getWebUser/:uid', webusers.getWebUser);
+router.put('/updateWebUsers/:id', webusers.updateWebUsers);
+router.post('/createWebUser', webusers.createWebUser);
+
 
 module.exports = router;

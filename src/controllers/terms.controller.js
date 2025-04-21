@@ -23,4 +23,19 @@ async function addTerm(req, res) {
   }
 }
 
-module.exports = { getTerms, addTerm }
+async function updateTerm(req, res) {
+  try {
+    const { term_id, word, meaning } = req.body
+    const updatedTerm = await TermsModel.findByIdAndUpdate(
+      term_id,
+      { $set: { word, meaning }},
+      { new: true, runValidators: true }
+    )
+    console.log("UpdateTerm:", updatedTerm);
+    res.json( updatedTerm )
+  } catch (error) {
+    console.error("Error updating term:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
+module.exports = { getTerms, addTerm, updateTerm }
