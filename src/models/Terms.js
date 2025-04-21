@@ -8,6 +8,14 @@ const termsSchema = new mongoose.Schema({
   meaning: {
     type: String,
     required: true,
+  },
+  tags: {
+    type: Array,
+    default: []
+  },
+  is_deleted: {
+    type: Boolean,
+    default: false
   }
 })
 
