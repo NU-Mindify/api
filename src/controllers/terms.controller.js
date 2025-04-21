@@ -2,7 +2,7 @@ const TermsModel = require("../models/Terms");
 
 async function getTerms(req, res) {
   try {
-    const terms = await TermsModel.find().sort({ word: 1 })
+    const terms = await TermsModel.find({ is_deleted: false }).sort({ word: 1 })
     res.json(terms)
     console.log(req.body);
     

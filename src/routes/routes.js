@@ -5,6 +5,7 @@ const terms = require('../controllers/terms.controller')
 const progress = require('../controllers/progress.controller')
 const chats = require('../controllers/chats.controller')
 const questions = require('../controllers/questions.controller')
+const attempts = require('../controllers/attempts.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 
@@ -35,9 +36,14 @@ router.get('/getQuestions', questions.getQuestions)
 router.post('/addQuestion', questions.addQuestion)
 router.patch('/updateQuestion', questions.updateQuestion)
 
-//web routes
+router.get('/getLeaderboard', attempts.getLeaderboard)
+router.post('/addAttempt', attempts.addAttempt)
+
+// Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
 router.get('/getWebUser/:uid', webusers.getWebUser);
-router.put('/updateWebUsers/:id', webusers.updateWebUsers)
+router.put('/updateWebUsers/:id', webusers.updateWebUsers);
+router.post('/createWebUser', webusers.createWebUser);
+
 
 module.exports = router;
