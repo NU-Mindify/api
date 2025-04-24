@@ -2,15 +2,36 @@ const TermsModel = require("../models/Terms");
 
 async function getTerms(req, res) {
   try {
-    const terms = await TermsModel.find({ is_deleted: false }).sort({ word: 1 })
-    res.json(terms)
-    console.log(req.body);
-    
+
+    const terms = await TermsModel.find({ is_deleted: false })
+      .sort({ word: 1 })
+
+    res.json(terms);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error })
+    res.status(500).json({ error });
   }
 }
+
+async function getLimitedTerms(req, res) {
+  try {
+    const start = parseInt(req.params.start) || 0;
+    const end = parseInt(req.params.end) || start + 20;
+
+    const terms = await TermsModel.find({ is_deleted: false })
+      .sort({ word: 1 })
+      .skip(start)
+      .limit(end - start);
+
+    res.json(terms);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+}
+
+
+
 
 async function addTerm(req, res) {
   try {
@@ -22,6 +43,7 @@ async function addTerm(req, res) {
     res.status(422).json({ message: error.message })
   }
 }
+
 
 async function updateTerm(req, res) {
   try {
@@ -57,4 +79,4 @@ async function deleteTerm(req, res) {
 
 
 
-module.exports = { getTerms, addTerm, updateTerm, deleteTerm }
+module.exports = { getTerms, addTerm, updateTerm, deleteTerm, getLimitedTerms }
