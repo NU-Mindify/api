@@ -27,6 +27,7 @@ const QuestionsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  item_number: Number,
   choices: [choiceSchema],
   rationale: String,
   answer:{
@@ -35,6 +36,10 @@ const QuestionsSchema = new mongoose.Schema({
   },
   ytlink:String,
   image:String,
+  is_deleted: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const QuestionsModel = mongoose.model("questions", QuestionsSchema)
