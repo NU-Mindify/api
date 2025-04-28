@@ -17,6 +17,7 @@ async function getLeaderboard(req, res) {
 
     const attempts = await AttemptsModel
     .find(queries)
+    .limit(20)
     .sort({
       correct: 'desc', 
       time_completion: 'asc',
