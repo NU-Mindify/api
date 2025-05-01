@@ -58,6 +58,36 @@ async function addAttempt(req, res) {
 
 async function getTopLeaderboards(req, res) {
   try {
+    const { mode } = req.query;
+
+    if (!mode) {
+      throw new Error("Mode params not found!");
+    }
+
+    // Convert modes into arrays
+    const modeArray = mode.split(',');
+  
+    const queries = {
+      mode: { $in: modeArray }  // Match any of the modes in the list
+    };
+
+    const leaderboardData = await AttemptsModel.find(queries)
+      .populate('user_id')
+      .limit(30)
+      .sort({
+        correct: 'desc',
+        time_completion: 'asc',
+        created_at: 'desc'
+      });
+
+    res.json(leaderboardData);
+  } catch (error) {
+    res.status(422).json({ error: error.message });
+  }
+}
+
+async function getAnalytics(req, res) {
+  try {
     const { categories, levels, mode } = req.query;
 
     if (!categories || !levels) {
@@ -90,4 +120,5 @@ async function getTopLeaderboards(req, res) {
   }
 }
 
-module.exports = { getLeaderboard, addAttempt, getTopLeaderboards}
+
+module.exports = { getLeaderboard, addAttempt, getTopLeaderboards, getAnalytics}
