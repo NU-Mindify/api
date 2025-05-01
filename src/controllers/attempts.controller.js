@@ -77,6 +77,7 @@ async function getTopLeaderboards(req, res) {
 
     const leaderboardData = await AttemptsModel.find(queries)
       .populate('user_id')
+      .limit(30)
       .sort({
         correct: 'desc',
         time_completion: 'asc',
