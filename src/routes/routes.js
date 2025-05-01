@@ -39,6 +39,8 @@ router.patch('/updateQuestion', questions.updateQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
+router.get('/getTopLeaderboards', attempts.getTopLeaderboards);
+router.get('/getAnalytics', attempts.getAnalytics);
 
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
