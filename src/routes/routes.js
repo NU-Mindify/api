@@ -8,6 +8,7 @@ const questions = require('../controllers/questions.controller')
 const attempts = require('../controllers/attempts.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
+const analytics = require('../controllers/web/analytics.controller')
 
 router.get('/', (req, res) => res.send(`
   <title>NU Mindify API</title>
@@ -28,6 +29,7 @@ router.put('/updateTerm/:id', terms.updateTerm)
 router.put('/deleteTerm/:id', terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
+router.get('/getAllProgress', progress.getAllProgress)
 router.post('/progressCategory', progress.progressCategory)
 
 router.get('/getMessages/:id', chats.getMessages);
@@ -40,13 +42,15 @@ router.patch('/updateQuestion', questions.updateQuestion)
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
 router.get('/getTopLeaderboards', attempts.getTopLeaderboards);
-router.get('/getAnalytics', attempts.getAnalytics);
+
 
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
 router.get('/getWebUser/:uid', webusers.getWebUser);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
+
+router.get('/getAnalytics', analytics.getAnalytics);
 
 
 module.exports = router;

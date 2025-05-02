@@ -22,6 +22,16 @@ async function getUserProgress(req, res) {
   }
 }
 
+async function getAllProgress(req, res) {
+  try {
+    const userProgress = await ProgressModel.find()
+    res.json(userProgress)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error })
+  }
+}
+
 async function progressCategory(req, res) {
   try {
     const {user_id, category, mode} = req.body;
@@ -43,4 +53,4 @@ async function progressCategory(req, res) {
   }
 }
 
-module.exports = { getUserProgress, progressCategory }
+module.exports = { getUserProgress, progressCategory, getAllProgress }
