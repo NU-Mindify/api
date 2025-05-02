@@ -29,6 +29,7 @@ router.put('/updateTerm/:id', terms.updateTerm)
 router.put('/deleteTerm/:id', terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
+router.get('/getAllProgress', progress.getAllProgress)
 router.post('/progressCategory', progress.progressCategory)
 
 router.get('/getMessages/:id', chats.getMessages);
