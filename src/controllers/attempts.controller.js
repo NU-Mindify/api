@@ -10,11 +10,10 @@ async function getLeaderboard(req, res) {
       throw new Error("Category or level params not found!");
     }
     if(user_id) queries.user_id = user_id
-
-    queries.category = category;
-    queries.level = level;
-    queries.mode = mode
-
+    if(category) queries.category = category;
+    if (mode) queries.mode = mode;
+    if (level) queries.level = level
+    
     const attempts = await AttemptsModel
     .find(queries)
     .limit(20)
@@ -49,7 +48,7 @@ async function addAttempt(req, res) {
       return;
     }
 
-    res.json(attempt);
+    res.json({attempt});
   } catch (error) {
     res.status(422).json({error: error.message});
     console.error(error);
