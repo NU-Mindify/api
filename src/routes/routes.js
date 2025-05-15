@@ -34,6 +34,7 @@ router.post('/progressCategory', progress.progressCategory)
 
 router.get('/getMessages/:id', chats.getMessages);
 router.post('/sendMessage', chats.sendMessage)
+router.post('/deleteAllMessages', chats.deleteAllMessages)
 
 router.get('/getQuestions', questions.getQuestions)
 router.post('/addQuestion', questions.addQuestion)

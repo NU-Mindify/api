@@ -21,6 +21,25 @@ async function getMessages(req, res) {
   }
 }
 
+async function deleteAllMessages(req, res) {
+  try {
+    const { user_id } = req.body
+    console.log(user_id);
+
+    const result = await MessagesModel.deleteMany({
+      $or: [
+        { sender_id: user_id },
+        { recepient_id: user_id }
+      ]
+    })
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error })
+  }
+}
+
 async function sendMessage(req, res) {
   try {
     const { user_id, message } = req.body;
@@ -66,4 +85,4 @@ async function generate(message) {
   return result.response.text();
 }
 
-module.exports = { getMessages, sendMessage }
+module.exports = { getMessages, sendMessage, deleteAllMessages }
