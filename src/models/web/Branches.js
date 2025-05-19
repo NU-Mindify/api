@@ -1,7 +1,15 @@
 const mongoose = require("mongoose");
 
 const BranchesSchema = new mongoose.Schema({
-  branchName: {
+  branch_id: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  extension: {
     type: String,
     required: true,
   },
