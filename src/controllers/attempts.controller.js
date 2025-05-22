@@ -5,8 +5,9 @@ async function getLeaderboard(req, res) {
   try {
     const queries = {};
     const { category, level, limit, user_id, mode } = req.query;
-
-    if(!category, !level){
+    console.log(req.query);
+    
+    if(!category || (!level && mode !== 'mastery' ) || (level && mode === 'mastery')){
       throw new Error("Category or level params not found!");
     }
     if(user_id) queries.user_id = user_id
@@ -25,12 +26,15 @@ async function getLeaderboard(req, res) {
     .populate("user_id")
     res.json(attempts)
   } catch (error) {
-    res.status(422).json({error: error.message});
+    res.status(500).json({error: error.message});
+    console.error(error);
   }
 }
 
 async function addAttempt(req, res) {
   try {
+    console.log(req.body.attempt);
+    
     const newAttempt = new AttemptsModel(req.body.attempt);
     const attempt = await newAttempt.save();
 
@@ -40,7 +44,7 @@ async function addAttempt(req, res) {
       
       const progress_data = await ProgressModel.findOneAndUpdate(
         { user_id: user_id },
-        { $inc: { [`${mode}.${category}`]: 1} },
+        { $inc: { [`classic.${category}`]: 1} },
         { new: true }
       )
       console.log(progress_data);
