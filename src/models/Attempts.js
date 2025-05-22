@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { MODES } = require('../../constants');
 
 const Schema = mongoose.Schema;
 
@@ -7,9 +8,14 @@ const AttemptsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users'
   },
+  mode: {
+    type: String,
+    enum: MODES,
+    required: true
+  },
   level: {
     type: Number,
-    required: true
+    required: function () { return this.mode !== "mastery"}
   },
   category: {
     type: String,
@@ -34,11 +40,6 @@ const AttemptsSchema = new Schema({
   },
   branch:{
     type: String,
-    required: true
-  },
-  mode: {
-    type: String,
-    enum:['classic', 'mastery'],
     required: true
   },
   created_at:{

@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
-const QuestionsModel = require('./Questions')
+const { MODES } = require('../../constants');
 
 const LeaderboardsSchema = new Schema({
   level:String,
   category:String,
   mode:{
     type: String,
-    enum:["classic", "mastery"]
+    enum: MODES
   },
   scores:[{
     user_id:{

@@ -9,7 +9,7 @@ async function getQuestions(req, res) {
     if(level) queries.level = level;
     console.log(queries);
     
-    const questions = await QuestionsModel.find({...queries, is_deleted: false}).limit(30)
+    const questions = await QuestionsModel.find({...queries, is_deleted: false})
     res.json(questions)
   } catch (error) {
     res.status(500).json({ error: error.message })
