@@ -37,10 +37,32 @@ async function addAttempt(req, res) {
     
     const newAttempt = new AttemptsModel(req.body.attempt);
     const attempt = await newAttempt.save();
+    const { mode, category, user_id, level } = req.body.attempt
+    if(mode === "competition"){
+      const highestScore = await AttemptsModel.findOne({user_id, category, level, mode })
+        .sort({
+          correct: 'desc',
+          time_completion: 'asc',
+          created_at: 'desc'
+        })
+      
+      if (highestScore._id.equals(attempt._id)) {
+        const updatePath = `high_scores.${category}.${parseInt(level) - 1}`;
+        const progress_data = await ProgressModel.findOneAndUpdate(
+          { user_id },
+          { $set: { [updatePath]: req.body.attempt } },
+          {new: true, upsert:true}
+        );
+        if(!req.body.progressUserLevel){
+          console.log(progress_data);
+          res.json({attempt, progress_data})
+          return;
+        }
+      }
+    }
 
     if(req.body.progressUserLevel){
       console.log(req.body.attempt);
-      const { mode, category, user_id } = req.body.attempt
       
       const progress_data = await ProgressModel.findOneAndUpdate(
         { user_id: user_id },
