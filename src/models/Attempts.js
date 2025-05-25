@@ -42,11 +42,11 @@ const AttemptsSchema = new Schema({
     type: String,
     required: true
   },
-  created_at:{
-    type: Date,
-    default: Date.now
+  stars:{
+    type: Number,
+    enum: [0, 1, 2, 3]
   }
-})
+}, {timestamps: true})
 
 const AttemptsModel = mongoose.model("attempts", AttemptsSchema);
 
