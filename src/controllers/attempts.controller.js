@@ -47,14 +47,13 @@ async function addAttempt(req, res) {
         })
       
       if (highestScore._id.equals(attempt._id)) {
-        const updatePath = `high_scores.${category}.${parseInt(level) - 1}`;
+        const updatePath = `high_scores.${category}.${level - 1}`;
         const progress_data = await ProgressModel.findOneAndUpdate(
           { user_id },
           { $set: { [updatePath]: req.body.attempt } },
           {new: true, upsert:true}
         );
         if(!req.body.progressUserLevel){
-          console.log(progress_data);
           res.json({attempt, progress_data})
           return;
         }
