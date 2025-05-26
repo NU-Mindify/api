@@ -55,6 +55,8 @@ router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
 
 router.get('/getAnalytics', analytics.getAnalytics);
+router.get('/getUserAttempts', attempts.getUserAttempts);
+
 
 router.get('/getBranches', branches.getBranches);
 

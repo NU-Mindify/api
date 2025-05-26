@@ -31,6 +31,7 @@ async function getLeaderboard(req, res) {
   }
 }
 
+
 async function addAttempt(req, res) {
   try {
     console.log(req.body.attempt);
@@ -111,4 +112,23 @@ async function getTopLeaderboards(req, res) {
   }
 }
 
-module.exports = { getLeaderboard, addAttempt, getTopLeaderboards}
+async function getUserAttempts (req, res){
+
+  const { user_id} = req.query;
+
+  try{
+      if(!user_id){
+        throw new Error("User ID not Found");
+        
+      }
+    const attempts = await AttemptsModel
+    .find({user_id})
+    res.json(attempts)
+  }
+  catch(error){
+    console.log(error);
+    
+  }
+} 
+
+module.exports = { getLeaderboard, addAttempt, getTopLeaderboards, getUserAttempts}
