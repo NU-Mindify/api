@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const HighestScoreSchema = { 
+const HighestScoreSchema = new Schema({ 
   time_completion: {
     type: Number,
     required: true
@@ -22,7 +22,7 @@ const HighestScoreSchema = {
     type: Number,
     enum: [0, 1, 2, 3]
   }
-}
+}, {_id: false})
 
 const ProgressSchema = new Schema({
   user_id: {
@@ -53,11 +53,31 @@ const ProgressSchema = new Schema({
     }
   },
   high_scores: {
-    abnormal: [HighestScoreSchema],
-    developmental: [HighestScoreSchema],
-    psychological: [HighestScoreSchema],
-    industrial: [HighestScoreSchema],
-    general: [HighestScoreSchema],
+    abnormal: {
+      type: Map,
+      of: HighestScoreSchema,
+      default: () => new Map()
+    },
+    developmental: {
+      type: Map,
+      of: HighestScoreSchema,
+      default: () => new Map()
+    },
+    psychological: {
+      type: Map,
+      of: HighestScoreSchema,
+      default: () => new Map()
+    },
+    industrial: {
+      type: Map,
+      of: HighestScoreSchema,
+      default: () => new Map()
+    },
+    general: {
+      type: Map,
+      of: HighestScoreSchema,
+      default: () => new Map()
+    },
   }
 })
 
