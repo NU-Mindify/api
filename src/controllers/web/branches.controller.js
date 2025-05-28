@@ -10,4 +10,14 @@ async function getBranches(req, res){
     }
 }
 
-module.exports = { getBranches }
+const addBranches = (req, res) => {
+    const newBranches = new BranchesModel(req.body)
+    newBranches.save()
+     .then(newbranches => res.json(newbranches))
+     .catch(err=>{
+        console.log(err);
+        res.status(500).json({err})
+     })
+}
+
+module.exports = { getBranches, addBranches }
