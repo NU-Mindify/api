@@ -12,6 +12,8 @@ const analytics = require('../controllers/web/analytics.controller')
 
 const branches = require('../controllers/web/branches.controller')
 
+const logs = require('../controllers/web/logs.controller')
+
 router.get('/', (req, res) => res.send(`
   <title>NU Mindify API</title>
   <h1>NU Mindify API</h1>
@@ -57,10 +59,12 @@ router.post('/createWebUser', webusers.createWebUser);
 router.get('/getAnalytics', analytics.getAnalytics);
 router.get('/getUserAttempts', attempts.getUserAttempts);
 
-
+//branches routes
 router.get('/getBranches', branches.getBranches);
+router.post('/addBranches', branches.addBranches);
 
-
-
+//system logs routes
+router.get('/getLogs', logs.getLogs);
+router.post('/addLogs', logs.addLogs);
 
 module.exports = router;

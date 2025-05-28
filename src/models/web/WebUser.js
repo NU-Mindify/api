@@ -32,7 +32,13 @@ const WebUsersSchema = new mongoose.Schema({
   useravatar: {
     type: String,
     required: true
-  }
+  },
+  approved: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+
 })
 
 const WebUsersModel = mongoose.model("webusers", WebUsersSchema);
