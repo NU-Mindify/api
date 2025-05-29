@@ -2,7 +2,7 @@ const LogsModel = require('../../models/web/Logs');
 
 async function getLogs(req,res) {
     try{
-        const logs = await LogsModel.find();
+        const logs = await LogsModel.find().populate("uid");
         res.json(logs)
     }catch (error){
         console.log(error);

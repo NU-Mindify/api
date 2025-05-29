@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const LogsSchema = new mongoose.Schema({
     uid: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'webuser',
         required: true
     },
     action: {
