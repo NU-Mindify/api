@@ -1,13 +1,13 @@
 const LogsModel = require('../../models/web/Logs');
 
-async function getLogs(req,res) {
-    try{
-        const logs = await LogsModel.find();
-        res.json(logs)
-    }catch (error){
-        console.log(error);
-        res.status(500).json({error})
-    }
+async function getLogs(req, res) {
+  try {
+    const logs = await LogsModel.find().sort({ createdAt: -1 });
+    res.json(logs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
 }
 
 const addLogs = (req, res) => {

@@ -34,8 +34,7 @@ async function getUsersByBranch(req, res) {
 async function getWebUser(req, res) {
   try {
     const uid = req.params.uid
-
-    const webuser = await WebUsersModel.findOne({uid})
+    const webuser = await WebUsersModel.findOne({uid}) 
     res.json(webuser)
   } catch (error) {
     console.log(error);
@@ -43,13 +42,29 @@ async function getWebUser(req, res) {
   }
 }
 
-const updateWebUsers = (req,res) => {
-  WebUsersModel.findByIdAndUpdate(req.params.id, req.body, {new:true})
-   .then(webuser => res.json(webuser))
-   .catch(err =>{
+
+
+async function loginByEmail(req, res) {
+  try {
+    const email = req.params.email
+    const webUserEmail = await WebUsersModel.findOne({email}) 
+    res.json(webUserEmail)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error })
+  }
+}
+
+
+async function updateWebUsers (req,res) {
+   try{
+    const webUser = await WebUsersModel.findByIdAndUpdate(req.params.id, req.body, {new:true})
+    res.json(webUser)
+   }
+   catch(error){
       console.log(err);
       res.status(500).json({error:"Internal Server Error"});
-   });
+   };
 }
 
 const createWebUser = (req, res) => {
@@ -63,4 +78,4 @@ const createWebUser = (req, res) => {
 }
 
 
-module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch }
+module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail }
