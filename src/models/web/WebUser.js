@@ -33,7 +33,7 @@ const WebUsersSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  approved: {
+  isApproved: {
     type: Boolean,
     required: true,
     default: false

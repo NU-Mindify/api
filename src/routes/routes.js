@@ -52,6 +52,7 @@ router.get('/getTopLeaderboards', attempts.getTopLeaderboards);
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
 router.get('/getWebUser/:uid', webusers.getWebUser);
+router.get('/login/:email', webusers.loginByEmail);
 router.get('/getWebUsers/:branch?', webusers.getUsersByBranch);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
