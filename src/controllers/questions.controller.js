@@ -9,7 +9,7 @@ async function getQuestions(req, res) {
     if(level) queries.level = level;
     console.log(queries);
     
-    const questions = await QuestionsModel.find({...queries, is_deleted: false})
+    const questions = await QuestionsModel.find({...queries})
     res.json(questions)
   } catch (error) {
     res.status(500).json({ error: error.message })
@@ -84,5 +84,20 @@ async function updateQuestion(req, res) {
     res.status(422).json({ message: error.message })
   }
 }
+async function deleteQuestion(req, res) {
+  try {
+    const { question_id, is_deleted } = req.body
+    const deletedQuestion = await QuestionsModel.findByIdAndUpdate(
+      question_id,
+      { $set: { is_deleted }},
+      { new: true, runValidators: true }
+    )
+    console.log("DeleteQuestion:", deletedQuestion);
+    res.json( deletedQuestion )
+  } catch (error) {
+    console.error("Error updating question:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
 
-module.exports = { getQuestions, addQuestion, updateQuestion, getTotalQuestions }
+module.exports = { getQuestions, addQuestion, updateQuestion, deleteQuestion, getTotalQuestions }
