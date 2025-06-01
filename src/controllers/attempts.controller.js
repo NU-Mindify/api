@@ -93,7 +93,7 @@ async function getTopLeaderboards(req, res) {
     const modeArray = mode.split(',');
   
     const queries = {
-      mode: { $in: modeArray }  // Match any of the modes in the list
+      mode: { $in: modeArray }  
     };
 
     const leaderboardData = await AttemptsModel.find(queries)

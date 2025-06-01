@@ -16,6 +16,50 @@ async function getQuestions(req, res) {
   }
 }
 
+// async function getTotalQuestions(req, res){
+//   try{
+//     const category = req.query.category
+
+//     const totalQuestion = await QuestionsModel.countDocuments({ category: category })
+//     res.json(totalQuestion)
+//     console.log(category);
+    
+    
+//   }
+//   catch(error){
+//     console.log(error);
+//     res.status(500).json({ error })
+//   }
+// }
+
+
+async function getTotalQuestions(req, res) {
+  try {
+    const category = req.query.category;
+
+    const totalQuestion = await QuestionsModel.aggregate([
+      {
+        $match: { is_deleted: false }
+      },
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { count: -1 }
+      }
+    ]);
+
+    res.json(totalQuestion); 
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+}
+
+
 async function addQuestion(req, res) {
   try {
     const newQuestion = new QuestionsModel(req.body);
@@ -25,6 +69,8 @@ async function addQuestion(req, res) {
     res.status(422).json({ error })
   }
 }
+
+
 
 async function updateQuestion(req, res) {
   try {
@@ -54,4 +100,4 @@ async function deleteQuestion(req, res) {
   }
 }
 
-module.exports = { getQuestions, addQuestion, updateQuestion, deleteQuestion }
+module.exports = { getQuestions, addQuestion, updateQuestion, deleteQuestion, getTotalQuestions }
