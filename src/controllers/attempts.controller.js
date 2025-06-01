@@ -83,18 +83,21 @@ async function addAttempt(req, res) {
 
 async function getTopLeaderboards(req, res) {
   try {
-    const { mode } = req.query;
+    const { mode, category } = req.query;
 
-    if (!mode) {
-      throw new Error("Mode params not found!");
+    const queries = {};
+
+    if (mode) {
+      queries.mode = { $in: mode.split(',') };
     }
 
-    // Convert modes into arrays
-    const modeArray = mode.split(',');
+    if (category) {
+      queries.category = { $in: category.split(',') };
+    }
   
-    const queries = {
-      mode: { $in: modeArray }  
-    };
+    if (Object.keys(queries).length === 0) {
+      throw new Error("At least one of 'mode' or 'category' must be provided.");
+    }
 
     const leaderboardData = await AttemptsModel.find(queries)
       .populate('user_id')
