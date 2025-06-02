@@ -6,6 +6,7 @@ const progress = require('../controllers/progress.controller')
 const chats = require('../controllers/chats.controller')
 const questions = require('../controllers/questions.controller')
 const attempts = require('../controllers/attempts.controller')
+const badges = require('../controllers/badges.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 const analytics = require('../controllers/web/analytics.controller')
@@ -50,6 +51,8 @@ router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
 router.get('/getTopLeaderboards', attempts.getTopLeaderboards);
 
+router.post('/addBadge', badges.addBadge)
+router.post('/addUserBadge', badges.addUserBadge)
 
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
