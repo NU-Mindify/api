@@ -39,7 +39,7 @@ const WebUsersSchema = new mongoose.Schema({
     default: false
   },
 
-})
+  }, { timestamps: true })
 
 const WebUsersModel = mongoose.model("webusers", WebUsersSchema);
 

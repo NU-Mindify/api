@@ -29,6 +29,10 @@ const UsersSchema = new mongoose.Schema({
   avatar: {
     type: Number,
     default: 0
+  },
+  is_deleted:{
+    type: Boolean,
+    default: false
   }
 }, { timestamps: true })
 

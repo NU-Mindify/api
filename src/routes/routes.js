@@ -42,8 +42,10 @@ router.post('/sendMessage', chats.sendMessage)
 router.post('/deleteAllMessages', chats.deleteAllMessages)
 
 router.get('/getQuestions', questions.getQuestions)
+router.get('/getTotalQuestions', questions.getTotalQuestions)
 router.post('/addQuestion', questions.addQuestion)
 router.patch('/updateQuestion', questions.updateQuestion)
+router.put('/deleteQuestion/:id', questions.deleteQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
