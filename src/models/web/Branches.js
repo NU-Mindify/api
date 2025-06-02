@@ -17,7 +17,7 @@ const BranchesSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-});
+}, { timestamps: true });
 
 const BranchesModel = mongoose.model("branches", BranchesSchema);
 
