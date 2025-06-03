@@ -48,4 +48,19 @@ async function updateUser(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser }
+async function removeTutorial(req, res) {
+  try {
+    const { user_id, tutorial } = req.query
+    const tutorialPath = `tutorial.${tutorial}`
+    const result = await UsersModel.findByIdAndUpdate(
+      user_id,
+      { $set: {[tutorialPath]: false}},
+      { new: true, runValidators: true }
+    )
+    res.json(result)
+  } catch (error) {
+    res.status(500).json({error})
+  }
+}
+
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial }

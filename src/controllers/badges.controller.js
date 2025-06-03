@@ -37,4 +37,14 @@ async function getUserBadges(req, res){
   }
 }
 
-module.exports = { addBadge, addUserBadge }
+async function getAllBadges(req, res) {
+  try {
+    const badges = await Badges.find()
+    res.json(badges)
+  } catch (error) {
+    res.status(500).json({error})
+  }
+  
+}
+
+module.exports = { addBadge, addUserBadge, getUserBadges, getAllBadges }
