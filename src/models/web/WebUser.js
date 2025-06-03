@@ -38,6 +38,11 @@ const WebUsersSchema = new mongoose.Schema({
     required: true,
     default: false
   },
+  is_deleted: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
 
   }, { timestamps: true })
 

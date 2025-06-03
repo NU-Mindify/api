@@ -65,6 +65,7 @@ router.get('/login/:email', webusers.loginByEmail);
 router.get('/getWebUsers/:branch?', webusers.getUsersByBranch);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
+router.put('/deleteWebUser/:id', webusers.deleteWebUser)
 
 router.get('/getAnalytics', analytics.getAnalytics);
 router.get('/getUserAttempts', attempts.getUserAttempts);
