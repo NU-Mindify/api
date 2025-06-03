@@ -33,6 +33,28 @@ const UsersSchema = new mongoose.Schema({
   is_deleted:{
     type: Boolean,
     default: false
+  },
+  points: {
+    type: Number,
+    default: 0
+  },
+  tutorial: {
+    worlds: {
+      type: Boolean,
+      default: true,
+    },
+    review: {
+      type: Boolean,
+      default: true
+    },
+    competition: {
+      type: Boolean,
+      default: true
+    },
+    mastery: {
+      type: Boolean,
+      default: true
+    }
   }
 }, { timestamps: true })
 

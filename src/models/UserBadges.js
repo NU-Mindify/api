@@ -13,7 +13,7 @@ const UserBadgesSchema = new Schema({
     ref: 'badges',
     required: true
   }
-})
+}, {timestamps: true})
 
 const UserBadgeModel = mongoose.model("user_badges", UserBadgesSchema);
 

@@ -4,23 +4,24 @@ const ProgressModel = require("../models/Progress");
 async function getLeaderboard(req, res) {
   try {
     const queries = {};
-    const { category, level, limit, user_id, mode } = req.query;
+    const { category, level, limit = 20, user_id, mode, branch } = req.query;
     console.log(req.query);
 
-    if (
-      !category ||
-      (!level && mode !== "mastery") ||
-      (level && mode === "mastery")
-    ) {
-      throw new Error("Category or level params not found!");
-    }
+    // if (
+    //   !category ||
+    //   (!level && mode !== "mastery") ||
+    //   (level && mode === "mastery")
+    // ) {
+    //   throw new Error("Category or level params not found!");
+    // }
     if (user_id) queries.user_id = user_id;
     if (category) queries.category = category;
     if (mode) queries.mode = mode;
     if (level) queries.level = level;
+    if (branch) queries.branch = branch
 
     const attempts = await AttemptsModel.find(queries)
-      .limit(20)
+      .limit(limit)
       .sort({
         correct: "desc",
         time_completion: "asc",
