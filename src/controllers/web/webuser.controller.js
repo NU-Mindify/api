@@ -82,15 +82,11 @@ async function deleteWebUser(req, res) {
   try {
     const { user_id, is_deleted } = req.body;
 
-    console.log(req.body);
-    
     const deletedUser = await WebUsersModel.findByIdAndUpdate(
       user_id,
       { $set: { "is_deleted": is_deleted } },
       { new: true, runValidators: true }
     );
-
-    console.log("Deleted User:", deletedUser);
     res.json(deletedUser);
   } catch (error) {
     console.error("Error deleting user:", error);

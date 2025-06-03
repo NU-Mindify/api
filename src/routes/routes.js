@@ -26,6 +26,7 @@ router.get('/getUsers', users.getUsers);
 router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
+router.put('/deleteUser:id', users.deleteStudent);
 
 router.get('/getTerms', terms.getTerms)
 router.get('/getLimitedTerms/:start/:end', terms.getLimitedTerms)
