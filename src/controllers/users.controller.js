@@ -95,4 +95,20 @@ async function removeTutorial(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, userBuy, addPoints }
+async function deleteStudent(req, res) {
+  try {
+    const { user_id, is_deleted } = req.body;
+
+    const deletedUser = await UsersModel.findByIdAndUpdate(
+      user_id,
+      { $set: { "is_deleted": is_deleted } },
+      { new: true, runValidators: true }
+    );
+    res.json(deletedUser);
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints }
