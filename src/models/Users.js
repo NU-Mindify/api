@@ -27,7 +27,11 @@ const UsersSchema = new mongoose.Schema({
     requried:true,
   },
   avatar: {
-    type: Number,
+    type: String,
+    default: 0
+  },
+  cloth: {
+    type: String,
     default: 0
   },
   is_deleted:{
@@ -55,6 +59,10 @@ const UsersSchema = new mongoose.Schema({
       type: Boolean,
       default: true
     }
+  },
+  items:{
+    type: [String],
+    default: ["bulldog", "b1", "g1", "female_unform", "male_unform"]
   }
 }, { timestamps: true })
 
