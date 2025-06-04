@@ -28,11 +28,11 @@ const UsersSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 0
+    default: "b1"
   },
   cloth: {
     type: String,
-    default: 0
+    default: "male_unform"
   },
   is_deleted:{
     type: Boolean,
