@@ -21,6 +21,11 @@ const WebUsersSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  password: { 
+    type: String, 
+    required: true,
+    select: false,
+  },
   employeenum: {
     type: Number,
     required: true
@@ -46,6 +51,23 @@ const WebUsersSchema = new mongoose.Schema({
   },
 
   }, { timestamps: true })
+
+WebUsersSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+WebUsersSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 const WebUsersModel = mongoose.model("webusers", WebUsersSchema);
 
