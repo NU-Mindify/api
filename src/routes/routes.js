@@ -9,10 +9,10 @@ const attempts = require('../controllers/attempts.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 const analytics = require('../controllers/web/analytics.controller')
-
 const branches = require('../controllers/web/branches.controller')
-
 const logs = require('../controllers/web/logs.controller')
+
+const authenticate = require('../middleware/auth')
 
 router.get('/', (req, res) => res.send(`
   <title>NU Mindify API</title>
@@ -21,7 +21,7 @@ router.get('/', (req, res) => res.send(`
   <style>*{text-align:center}</style>
   `))
 
-router.get('/getUsers', users.getUsers);
+router.get('/getUsers', authenticate, users.getUsers);
 router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
