@@ -27,8 +27,42 @@ const UsersSchema = new mongoose.Schema({
     requried:true,
   },
   avatar: {
+    type: String,
+    default: "b1"
+  },
+  cloth: {
+    type: String,
+    default: "male_unform"
+  },
+  is_deleted:{
+    type: Boolean,
+    default: false
+  },
+  points: {
     type: Number,
     default: 0
+  },
+  tutorial: {
+    worlds: {
+      type: Boolean,
+      default: true,
+    },
+    review: {
+      type: Boolean,
+      default: true
+    },
+    competition: {
+      type: Boolean,
+      default: true
+    },
+    mastery: {
+      type: Boolean,
+      default: true
+    }
+  },
+  items:{
+    type: [String],
+    default: ["bulldog", "b1", "g1", "female_unform", "male_unform"]
   }
 }, { timestamps: true })
 

@@ -34,13 +34,18 @@ const WebUsersSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  approved: {
+  isApproved: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  is_deleted: {
     type: Boolean,
     required: true,
     default: false
   },
 
-})
+  }, { timestamps: true })
 
 const WebUsersModel = mongoose.model("webusers", WebUsersSchema);
 

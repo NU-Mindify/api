@@ -6,6 +6,7 @@ const progress = require('../controllers/progress.controller')
 const chats = require('../controllers/chats.controller')
 const questions = require('../controllers/questions.controller')
 const attempts = require('../controllers/attempts.controller')
+const badges = require('../controllers/badges.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 const analytics = require('../controllers/web/analytics.controller')
@@ -25,6 +26,9 @@ router.get('/getUsers', authenticate, users.getUsers);
 router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
+router.get('/userBuy', users.userBuy);
+router.get('/addPoints', users.addPoints);
+router.put('/deleteUser/:id', users.deleteStudent);
 
 router.get('/getTerms', authenticate, terms.getTerms)
 router.get('/getLimitedTerms/:start/:end', authenticate, terms.getLimitedTerms)
@@ -41,20 +45,30 @@ router.post('/sendMessage', chats.sendMessage)
 router.post('/deleteAllMessages', chats.deleteAllMessages)
 
 router.get('/getQuestions', authenticate, questions.getQuestions)
+router.get('/getTotalQuestions', questions.getTotalQuestions)
 router.post('/addQuestion', authenticate, questions.addQuestion)
-router.patch('/updateQuestion', authenticate, questions.updateQuestion)
+router.patch('/updateQuestion', questions.updateQuestion)
+router.put('/deleteQuestion/:id', authenticate, questions.deleteQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
 router.get('/getTopLeaderboards', attempts.getTopLeaderboards);
 
+router.post('/addBadge', badges.addBadge)
+router.post('/addUserBadge', badges.addUserBadge)
+router.get('/getAllBadges', badges.getAllBadges)
+router.get('/getUserBadges', badges.getUserBadges)
+
+router.get('/removeTutorial', users.removeTutorial)
 
 // Web exclusive routes
 router.get('/getWebUsers', webusers.getWebUsers);
 router.get('/getWebUser/:uid', webusers.getWebUser);
+router.get('/login/:email', webusers.loginByEmail);
 router.get('/getWebUsers/:branch?', webusers.getUsersByBranch);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
+router.put('/deleteWebUser/:id', webusers.deleteWebUser)
 
 router.get('/getAnalytics', analytics.getAnalytics);
 router.get('/getUserAttempts', attempts.getUserAttempts);
