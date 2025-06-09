@@ -1,5 +1,6 @@
 const LogsModel = require('../../models/web/Logs');
 
+
 async function getLogs(req, res) {
   try {
     const logs = await LogsModel.find().sort({ createdAt: -1 });

@@ -27,7 +27,8 @@ const WebUsersSchema = new mongoose.Schema({
   },
   position: {
     type: String,
-    required: true
+    required: true,
+    enum: ["Professor", "Sub Admin"]
   },
   useravatar: {
     type: String,

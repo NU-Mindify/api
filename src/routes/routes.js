@@ -10,10 +10,10 @@ const badges = require('../controllers/badges.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 const analytics = require('../controllers/web/analytics.controller')
-
 const branches = require('../controllers/web/branches.controller')
-
 const logs = require('../controllers/web/logs.controller')
+
+const authenticate = require('../middleware/auth')
 
 router.get('/', (req, res) => res.send(`
   <title>NU Mindify API</title>
@@ -22,7 +22,7 @@ router.get('/', (req, res) => res.send(`
   <style>*{text-align:center}</style>
   `))
 
-router.get('/getUsers', users.getUsers);
+router.get('/getUsers', authenticate, users.getUsers);
 router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
@@ -30,11 +30,11 @@ router.get('/userBuy', users.userBuy);
 router.get('/addPoints', users.addPoints);
 router.put('/deleteUser/:id', users.deleteStudent);
 
-router.get('/getTerms', terms.getTerms)
-router.get('/getLimitedTerms/:start/:end', terms.getLimitedTerms)
-router.post('/addTerm', terms.addTerm)
-router.put('/updateTerm/:id', terms.updateTerm)
-router.put('/deleteTerm/:id', terms.deleteTerm)
+router.get('/getTerms', authenticate, terms.getTerms)
+router.get('/getLimitedTerms/:start/:end', authenticate, terms.getLimitedTerms)
+router.post('/addTerm', authenticate, terms.addTerm)
+router.put('/updateTerm/:id', authenticate, terms.updateTerm)
+router.put('/deleteTerm/:id', authenticate, terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.get('/getAllProgress', progress.getAllProgress)
@@ -44,11 +44,11 @@ router.get('/getMessages/:id', chats.getMessages);
 router.post('/sendMessage', chats.sendMessage)
 router.post('/deleteAllMessages', chats.deleteAllMessages)
 
-router.get('/getQuestions', questions.getQuestions)
+router.get('/getQuestions', authenticate, questions.getQuestions)
 router.get('/getTotalQuestions', questions.getTotalQuestions)
-router.post('/addQuestion', questions.addQuestion)
+router.post('/addQuestion', authenticate, questions.addQuestion)
 router.patch('/updateQuestion', questions.updateQuestion)
-router.put('/deleteQuestion/:id', questions.deleteQuestion)
+router.put('/deleteQuestion/:id', authenticate, questions.deleteQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
