@@ -26,11 +26,11 @@ router.get('/getUser/:uid', users.getUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
 
-router.get('/getTerms', terms.getTerms)
-router.get('/getLimitedTerms/:start/:end', terms.getLimitedTerms)
-router.post('/addTerm', terms.addTerm)
-router.put('/updateTerm/:id', terms.updateTerm)
-router.put('/deleteTerm/:id', terms.deleteTerm)
+router.get('/getTerms', authenticate, terms.getTerms)
+router.get('/getLimitedTerms/:start/:end', authenticate, terms.getLimitedTerms)
+router.post('/addTerm', authenticate, terms.addTerm)
+router.put('/updateTerm/:id', authenticate, terms.updateTerm)
+router.put('/deleteTerm/:id', authenticate, terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.get('/getAllProgress', progress.getAllProgress)
@@ -40,9 +40,9 @@ router.get('/getMessages/:id', chats.getMessages);
 router.post('/sendMessage', chats.sendMessage)
 router.post('/deleteAllMessages', chats.deleteAllMessages)
 
-router.get('/getQuestions', questions.getQuestions)
-router.post('/addQuestion', questions.addQuestion)
-router.patch('/updateQuestion', questions.updateQuestion)
+router.get('/getQuestions', authenticate, questions.getQuestions)
+router.post('/addQuestion', authenticate, questions.addQuestion)
+router.patch('/updateQuestion', authenticate, questions.updateQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
