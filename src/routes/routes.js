@@ -44,7 +44,7 @@ router.get('/getMessages/:id', chats.getMessages);
 router.post('/sendMessage', chats.sendMessage)
 router.post('/deleteAllMessages', chats.deleteAllMessages)
 
-router.get('/getQuestions', authenticate, questions.getQuestions)
+router.get('/getQuestions', questions.getQuestions)
 router.get('/getTotalQuestions', questions.getTotalQuestions)
 router.post('/addQuestion', authenticate, questions.addQuestion)
 router.patch('/updateQuestion', questions.updateQuestion)

@@ -10,27 +10,12 @@ async function getQuestions(req, res) {
     if (level) queries.level = level;
     console.log(queries);
 
-    const questions = await QuestionsModel.find({ ...queries });
+    const questions = await QuestionsModel.find({ ...queries }).limit(100);
     res.json(questions);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
-
-// async function getTotalQuestions(req, res){
-//   try{
-//     const category = req.query.category
-
-//     const totalQuestion = await QuestionsModel.countDocuments({ category: category })
-//     res.json(totalQuestion)
-//     console.log(category);
-
-//   }
-//   catch(error){
-//     console.log(error);
-//     res.status(500).json({ error })
-//   }
-// }
 
 async function getTotalQuestions(req, res) {
   try {
