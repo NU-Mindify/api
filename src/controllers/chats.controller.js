@@ -69,15 +69,17 @@ async function sendMessage(req, res) {
     res.json(aiMessageDoc)
   } catch (error) {
     res.status(500).json({ error })
+    console.error(error);
+    
   }
 }
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
 async function generate(message) {
-  const context = `You are a chatbot that helps psychology students. Do not answer the questions that are not related to the psychology. Add bulleted key points if possible. Provide a concise response to this: "${message}"`
+  const context = `You are a chatbot that helps psychology students. Strictly do not respond if the questions is not related to psychology. Add bulleted key points if possible. Provide a concise response to this: "${message}"`
 
   const result = await model.generateContent(context);
   console.log(result);
