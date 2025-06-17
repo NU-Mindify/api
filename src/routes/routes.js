@@ -58,6 +58,7 @@ router.post('/addBadge', badges.addBadge)
 router.post('/addUserBadge', badges.addUserBadge)
 router.get('/getAllBadges', badges.getAllBadges)
 router.get('/getUserBadges', badges.getUserBadges)
+router.get('/getTopEarnedBadges', badges.getTopEarnedBadges);
 
 router.get('/removeTutorial', users.removeTutorial)
 
