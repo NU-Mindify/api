@@ -11,15 +11,61 @@ async function getUsers(req, res) {
   }
 }
 
+//get by uid: uid from database
 async function getUser(req, res){
   try {
-    const uid = req.params.uid
+    const { user_id, uid } = req.query
+    if(uid){
+      const user = await UsersModel.findOne({ uid })
+      res.json(user)
+      return;
+    }
+    if(user_id){
+      const user = await UsersModel.findOne({ _id: user_id })
+      res.json(user)
+      return;
+    }
+    throw new Error("No uid or user_id provided");
     
-    const user = await UsersModel.findOne({ uid })
-    res.json(user)
   } catch (error) {
     console.log(error);
     res.status(500).json({ error })
+  }
+}
+
+async function searchUser(req, res) {
+  try {
+    const {name} = req.query
+    const regex = new RegExp(name, 'i');
+
+    const user = await UsersModel.aggregate([
+      {
+        $addFields: {
+          full_name: { $concat: ['$first_name', ' ', '$last_name'] }
+        }
+      },
+      {
+        $match: {
+          $or: [
+            { first_name: regex },
+            { last_name: regex },
+            { full_name: regex },
+            { username: regex }
+          ]
+        }
+      },
+      {
+        $project: {
+          full_name: 0
+        }
+      }
+    ]);
+
+    res.json(user)
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error)
+    
   }
 }
 
@@ -112,4 +158,4 @@ async function deleteStudent(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints }
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser }

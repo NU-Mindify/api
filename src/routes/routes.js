@@ -23,7 +23,8 @@ router.get('/', (req, res) => res.send(`
   `))
 
 router.get('/getUsers', authenticate, users.getUsers);
-router.get('/getUser/:uid', users.getUser);
+router.get('/getUser', users.getUser);
+router.get('/searchUser', users.searchUser);
 router.post('/createUser', users.createUser);
 router.post('/updateUser', users.updateUser);
 router.get('/userBuy', users.userBuy);
