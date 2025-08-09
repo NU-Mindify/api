@@ -7,6 +7,7 @@ const chats = require('../controllers/chats.controller')
 const questions = require('../controllers/questions.controller')
 const attempts = require('../controllers/attempts.controller')
 const badges = require('../controllers/badges.controller')
+const mindmap = require('../controllers/mindmap.controller')
 
 const webusers = require('../controllers/web/webuser.controller')
 const analytics = require('../controllers/web/analytics.controller')
@@ -40,6 +41,8 @@ router.put('/deleteTerm/:id', authenticate, terms.deleteTerm)
 router.get('/getProgress/:id', progress.getUserProgress)
 router.get('/getAllProgress', progress.getAllProgress)
 router.post('/progressCategory', progress.progressCategory)
+
+router.post('/generateMindmap', mindmap.generateMindmap)
 
 router.get('/getMessages/:id', chats.getMessages);
 router.post('/sendMessage', chats.sendMessage)
