@@ -32,6 +32,7 @@ router.get('/addPoints', users.addPoints);
 router.put('/deleteUser/:id', users.deleteStudent);
 
 router.get('/getTerms', authenticate, terms.getTerms)
+router.get('/getDeletedTerms', authenticate, terms.getDeletedTerms)
 router.get('/getLimitedTerms/:start/:end', authenticate, terms.getLimitedTerms)
 router.post('/addTerm', authenticate, terms.addTerm)
 router.put('/updateTerm/:id', authenticate, terms.updateTerm)
