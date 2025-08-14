@@ -38,7 +38,8 @@ const model = genAI.getGenerativeModel({
                 "type": "object",
                 "properties": {
                   "label": { "type": "string" },
-                  "description": { "type": "string"}
+                  "description": { "type": "string"},
+                  "color": {"type": "string"}
                 },
                 "required": ["label"]
               },
@@ -73,7 +74,7 @@ const model = genAI.getGenerativeModel({
 });
 
 async function generateJSON(userQuery) {
-  const prompt = `You are an AI assistant for generating mind maps. A user has provided a topic. Your task is to generate a mind map with a central topic and several sub-topics with description. For each sub-topic, provide 2 or more related ideas depending on how broad the topic is. The mind map should be structured in a way that is logical for visualization.
+  const prompt = `You are an AI assistant for generating mind maps. A user has provided a topic. Your task is to generate a mind map with a central topic and several sub-topics with description. For each sub-topic, provide 2 or more related ideas depending on how broad the topic is. The mind map should be structured in a way that is logical for visualization. **For each main subtopic, assign a distinct color.** All child nodes of a subtopic must have the **same color** as their parent. Do not assign a color to the central topic.
 
   User Topic: "${userQuery}"
 
