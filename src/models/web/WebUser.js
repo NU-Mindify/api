@@ -28,7 +28,7 @@ const WebUsersSchema = new mongoose.Schema({
     select: false,
   },
   employeenum: {
-    type: Number,
+    type: String,
     required: true
   },
   position: {
