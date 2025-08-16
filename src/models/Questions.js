@@ -27,6 +27,10 @@ const QuestionsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  timer:{
+    type: Number,
+    required: true
+  },
   difficulty:{
     type: String,
     require: true,
