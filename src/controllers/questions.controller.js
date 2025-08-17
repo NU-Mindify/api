@@ -10,7 +10,28 @@ async function getQuestions(req, res) {
     if (level) queries.level = level;
     console.log(queries);
 
+
     const questions = await QuestionsModel.find({ ...queries }).limit(100);
+    res.json(questions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+async function getQuestionsWeb(req, res) {
+  try {
+    const queries = {};
+    const { category, level } = req.query;
+    if (category) queries.category = category;
+
+    if (level) queries.level = level;
+    console.log(queries);
+
+    const questions = await QuestionsModel.find({ ...queries })
+    .collation({ locale: "en", strength: 2 })
+    .sort({ count: -1 });
+
     res.json(questions);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -37,6 +58,34 @@ async function getTotalQuestions(req, res) {
     ]);
 
     res.json(totalQuestion);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+}
+
+async function getTotalDeletedQuestions(req, res) {
+  try {
+    const category = req.query.category;
+
+    const totalQuestion = await QuestionsModel.aggregate([
+      {
+        $match: { is_deleted: true },
+      },
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+    ]);
+
+    res.json(totalQuestion);
+    console.log("Total Deleted Questions:", totalQuestion);
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
@@ -95,4 +144,6 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   getTotalQuestions,
+  getQuestionsWeb,
+  getTotalDeletedQuestions,
 };
