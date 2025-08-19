@@ -158,4 +158,18 @@ async function deleteStudent(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser }
+async function checkEmailExists(req, res) {
+  try {
+    const { email } = req.body;
+    const User = await UsersModel.findOne({"email": email})
+    console.log(User, email);
+    
+    res.json({
+      exists: User ? true : false
+    })
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists }
