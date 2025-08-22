@@ -112,26 +112,14 @@ async function addQuestion(req, res) {
 
 async function updateQuestion(req, res) {
   try {
-    const { question_id, updates } = req.body;
- 
-    if (!question_id) {
-      return res.status(400).json({ message: "question_id is required" });
-    }
- 
-    const updatedQuestion = await QuestionsModel.findByIdAndUpdate(
-      question_id,
-      { $set: updates },
-      { new: true, runValidators: true }
+    const update = await QuestionsModel.updateMany(
+      {},
+      { $set: { category: "developmental", level: 1 } }
     );
- 
-    if (!updatedQuestion) {
-      return res.status(404).json({ message: "Question not found" });
-    }
- 
-    res.json(updatedQuestion);
+
+    res.json(update);
   } catch (error) {
-    console.error("Error updating question:", error);
-    res.status(500).json({ message: error.message });
+    res.status(422).json({ message: error.message });
   }
 }
 async function deleteQuestion(req, res) {
