@@ -31,7 +31,7 @@ router.post('/updateUser', users.updateUser);
 router.get('/userBuy', users.userBuy);
 router.get('/addPoints', users.addPoints);
 router.put('/deleteUser/:id', users.deleteStudent);
-router.get('/checkEmailExists', users.checkEmailExists)
+router.post('/checkEmailExists', users.checkEmailExists)
 
 router.get('/getTerms', authenticate, terms.getTerms)
 router.get('/getDeletedTerms', authenticate, terms.getDeletedTerms)

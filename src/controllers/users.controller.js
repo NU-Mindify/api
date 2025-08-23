@@ -162,13 +162,13 @@ async function checkEmailExists(req, res) {
   try {
     const { email } = req.body;
     const User = await UsersModel.findOne({"email": email})
-    console.log(User, email);
     
     res.json({
       exists: User ? true : false
     })
   } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
 
