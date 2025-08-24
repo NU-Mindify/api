@@ -17,7 +17,7 @@ const termsSchema = new mongoose.Schema({
     type: Boolean, 
     default: false,
   },
-})
+}, {timestamps: true})
 
 const TermsModel = mongoose.model("terms", termsSchema)
 

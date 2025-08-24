@@ -172,4 +172,18 @@ async function checkEmailExists(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists }
+async function checkUsernameExists(req, res) {
+  try {
+    const { username } = req.body;
+    const User = await UsersModel.findOne({ "username": username })
+
+    res.json({
+      exists: User ? true : false
+    })
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists }

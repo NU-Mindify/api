@@ -32,6 +32,28 @@ async function getAllProgress(req, res) {
   }
 }
 
+async function progressStory(req, res) {
+  try {
+    const {user_id, category, value} = req.body;
+    if(!user_id || !category || !value){
+      throw "Not Updated";
+    }
+    const newProgress = await ProgressModel.findOneAndUpdate(
+      { user_id },
+      {[`story.${category}`]: value},
+      { new: true }
+    )
+
+    if (!newProgress) {
+      throw new Error("Not Updated");
+    }
+
+    res.json(newProgress)
+  } catch (error) {
+    res.status(422).json(error)
+  }
+}
+
 async function progressCategory(req, res) {
   try {
     const {user_id, category, mode} = req.body;
@@ -53,4 +75,4 @@ async function progressCategory(req, res) {
   }
 }
 
-module.exports = { getUserProgress, progressCategory, getAllProgress }
+module.exports = { getUserProgress, progressCategory, getAllProgress, progressStory }

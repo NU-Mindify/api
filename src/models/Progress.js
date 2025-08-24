@@ -52,6 +52,28 @@ const ProgressSchema = new Schema({
       default: 0
     }
   },
+  story:{
+    abnormal: {
+      type: Number,
+      default: 0
+    },
+    developmental: {
+      type: Number,
+      default: 0
+    },
+    psychological: {
+      type: Number,
+      default: 0
+    },
+    industrial: {
+      type: Number,
+      default: 0
+    },
+    general: {
+      type: Number,
+      default: 0
+    }
+  },
   high_scores: {
     abnormal: {
       type: Map,

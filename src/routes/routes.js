@@ -10,6 +10,8 @@ const badges = require("../controllers/badges.controller");
 const mindmap = require("../controllers/mindmap.controller");
 const sessions = require("../controllers/sessions.controller")
 
+const config = require("../controllers/config.controller")
+
 const webusers = require("../controllers/web/webuser.controller");
 const analytics = require("../controllers/web/analytics.controller");
 const branches = require("../controllers/web/branches.controller");
@@ -35,11 +37,13 @@ router.get("/userBuy", users.userBuy);
 router.get("/addPoints", users.addPoints);
 router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
+router.post("/checkUsernameExists", users.checkUsernameExists);
 
 router.post("/addSession", sessions.addSession);
 router.get("/getRecentSessions", sessions.getRecentSessions);
 
 router.get("/getTerms", terms.getTerms);
+router.get("/getLatestUpdatedTerm", terms.getLatestUpdatedTerm)
 router.get("/getDeletedTerms", terms.getDeletedTerms);
 router.get("/getLimitedTerms/:start/:end", terms.getLimitedTerms);
 router.post("/addTerm", terms.addTerm);
@@ -49,6 +53,7 @@ router.put("/deleteTerm/:id", terms.deleteTerm);
 router.get("/getProgress/:id", progress.getUserProgress);
 router.get("/getAllProgress", progress.getAllProgress);
 router.post("/progressCategory", progress.progressCategory);
+router.post("/progressStory", progress.progressStory);
 
 router.post("/generateMindmap", mindmap.generateMindmap);
 

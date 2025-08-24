@@ -24,6 +24,15 @@ async function getDeletedTerms(req, res) {
   }
 }
 
+async function getLatestUpdatedTerm(req, res) {
+  try {
+    const term = await TermsModel.findOne({is_deleted: false}).sort({updatedAt: -1})
+    res.json(term)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 async function getLimitedTerms(req, res) {
   try {
     const start = parseInt(req.query.start) || 0;
@@ -86,4 +95,4 @@ async function deleteTerm(req, res) {
   }
 }
 
-module.exports = {getTerms, addTerm, updateTerm, deleteTerm, getLimitedTerms, getDeletedTerms};
+module.exports = { getTerms, addTerm, updateTerm, deleteTerm, getLimitedTerms, getDeletedTerms, getLatestUpdatedTerm };
