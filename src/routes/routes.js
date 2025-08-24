@@ -55,7 +55,7 @@ router.get('/getQuestionsWeb', questions.getQuestionsWeb)
 router.get('/getTotalQuestions', questions.getTotalQuestions)
 router.get('/getTotalDeletedQuestions', questions.getTotalDeletedQuestions)
 router.post('/addQuestion', authenticate, questions.addQuestion)
-router.patch('/updateQuestion', questions.updateQuestion)
+router.put('/updateQuestion/:id', questions.updateQuestion)
 router.put('/deleteQuestion/:id', authenticate, questions.deleteQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)

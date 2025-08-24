@@ -94,7 +94,7 @@ async function getTotalDeletedQuestions(req, res) {
 
 async function addQuestion(req, res) {
   try {
-    console.log(req.body);
+    const { _id, question, meaning, tags } = req.body;
 
     if (req.body.length === 0) {
       return res.status(400).json({ error: "Empty array is not allowed" });
@@ -103,8 +103,8 @@ async function addQuestion(req, res) {
     return res.status(201).json(questions);
 
     const newQuestion = new QuestionsModel(req.body);
-    const question = await newQuestion.save();
-    res.status(201).json(question);
+    const saveQuestion = await newQuestion.save();
+    res.status(201).json(saveQuestion);
   } catch (error) {
     res.status(422).json({ error });
   }
@@ -112,16 +112,70 @@ async function addQuestion(req, res) {
 
 async function updateQuestion(req, res) {
   try {
-    const update = await QuestionsModel.updateMany(
-      {},
-      { $set: { category: "developmental", level: 1 } }
+    const { id } = req.params;
+    const {
+      question,
+      category,
+      level,
+      timer,
+      difficulty,
+      choices,
+      rationale,
+      answer,
+      is_deleted,
+    } = req.body;
+
+    // if (!Array.isArray(choices) || choices.length !== 4) {
+    //   return res.status(400).json({
+    //     error:
+    //       "Choices must be an array of exactly 4 objects with { letter, text, rationale, isCorrect }",
+    //   });
+    // }
+
+    // for (const choice of choices) {
+    //   if (
+    //     !choice.letter ||
+    //     !choice.text ||
+    //     typeof choice.isCorrect !== "boolean" ||
+    //     !("rationale" in choice)
+    //   ) {
+    //     return res.status(400).json({
+    //       error:
+    //         "Each choice must contain: letter, text, rationale, and isCorrect (boolean)",
+    //     });
+    //   }
+    // }
+
+    const updatedQuestion = await QuestionsModel.findByIdAndUpdate(
+      id,
+      {
+        question,
+        category,
+        level,
+        timer,
+        difficulty,
+        choices,
+        rationale,
+        answer,
+        is_deleted,
+      },
+      { new: true, runValidators: true }
     );
 
-    res.json(update);
+    if (!updatedQuestion) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.status(200).json(updatedQuestion);
   } catch (error) {
-    res.status(422).json({ message: error.message });
+    console.error("Update Question Error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
+
+
+
+
 async function deleteQuestion(req, res) {
   try {
     const { question_id, is_deleted } = req.body;
