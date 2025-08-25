@@ -95,11 +95,11 @@ async function deleteWebUser(req, res) {
 }
 
 
-async function unapproveUser(req, res) {
+async function declineUser(req, res) {
   try {
     const { id } = req.params; 
 
-    const deletedUser = await User.findByIdAndDelete(id);
+    const deletedUser = await WebUsersModel.findByIdAndDelete(id);
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -115,4 +115,4 @@ async function unapproveUser(req, res) {
 
 
 
-module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail, deleteWebUser, unapproveUser }
+module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail, deleteWebUser, declineUser }

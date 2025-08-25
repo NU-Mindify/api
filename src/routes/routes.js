@@ -78,7 +78,7 @@ router.get('/getWebUsers/:branch?', webusers.getUsersByBranch);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
 router.put('/deleteWebUser/:id', webusers.deleteWebUser)
-router.delete('/unapproveUser/:id', webusers.unapproveUser)
+router.delete('/declineUser/:id', webusers.declineUser)
 
 router.get('/getAnalytics', analytics.getAnalytics);
 router.get('/getUserAttempts', attempts.getUserAttempts);
