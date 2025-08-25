@@ -23,7 +23,7 @@ router.get('/', (req, res) => res.send(`
   <style>*{text-align:center}</style>
   `))
 
-router.get('/getUsers', authenticate, users.getUsers);
+router.get('/getUsers', users.getUsers);
 router.get('/getUser', users.getUser);
 router.get('/searchUser', users.searchUser);
 router.post('/createUser', users.createUser);
@@ -33,12 +33,12 @@ router.get('/addPoints', users.addPoints);
 router.put('/deleteUser/:id', users.deleteStudent);
 router.post('/checkEmailExists', users.checkEmailExists)
 
-router.get('/getTerms', authenticate, terms.getTerms)
-router.get('/getDeletedTerms', authenticate, terms.getDeletedTerms)
-router.get('/getLimitedTerms/:start/:end', authenticate, terms.getLimitedTerms)
-router.post('/addTerm', authenticate, terms.addTerm)
-router.put('/updateTerm/:id', authenticate, terms.updateTerm)
-router.put('/deleteTerm/:id', authenticate, terms.deleteTerm)
+router.get('/getTerms', terms.getTerms)
+router.get('/getDeletedTerms', terms.getDeletedTerms)
+router.get('/getLimitedTerms/:start/:end', terms.getLimitedTerms)
+router.post('/addTerm', terms.addTerm)
+router.put('/updateTerm/:id', terms.updateTerm)
+router.put('/deleteTerm/:id', terms.deleteTerm)
 
 router.get('/getProgress/:id', progress.getUserProgress)
 router.get('/getAllProgress', progress.getAllProgress)
@@ -54,9 +54,9 @@ router.get('/getQuestions', questions.getQuestions)
 router.get('/getQuestionsWeb', questions.getQuestionsWeb)
 router.get('/getTotalQuestions', questions.getTotalQuestions)
 router.get('/getTotalDeletedQuestions', questions.getTotalDeletedQuestions)
-router.post('/addQuestion', authenticate, questions.addQuestion)
+router.post('/addQuestion', questions.addQuestion)
 router.put('/updateQuestion/:id', questions.updateQuestion)
-router.put('/deleteQuestion/:id', authenticate, questions.deleteQuestion)
+router.put('/deleteQuestion/:id', questions.deleteQuestion)
 
 router.get('/getLeaderboard', attempts.getLeaderboard)
 router.post('/addAttempt', attempts.addAttempt)
