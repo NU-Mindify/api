@@ -95,5 +95,24 @@ async function deleteWebUser(req, res) {
 }
 
 
+async function unapproveUser(req, res) {
+  try {
+    const { id } = req.params; 
 
-module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail, deleteWebUser }
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully", deletedUser });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+
+
+module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail, deleteWebUser, unapproveUser }

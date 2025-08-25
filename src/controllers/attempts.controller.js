@@ -18,7 +18,7 @@ async function getLeaderboard(req, res) {
     if (category) queries.category = category;
     if (mode) queries.mode = mode;
     if (level) queries.level = level;
-    if (branch) queries.branch = branch
+    if (branch) queries.branch = branch;
 
     const attempts = await AttemptsModel.find(queries)
       .limit(limit)
@@ -69,7 +69,7 @@ async function addAttempt(req, res) {
         update,
         { new: true, upsert: true }
       );
-      
+
       res.json({ attempt, progress_data });
       return;
     }
@@ -88,13 +88,13 @@ async function getTopLeaderboards(req, res) {
     const queries = {};
 
     if (mode) {
-      queries.mode = { $in: mode.split(',') };
+      queries.mode = { $in: mode.split(",") };
     }
 
     if (category) {
-      queries.category = { $in: category.split(',') };
+      queries.category = { $in: category.split(",") };
     }
-  
+
     if (Object.keys(queries).length === 0) {
       throw new Error("At least one of 'mode' or 'category' must be provided.");
     }
@@ -128,9 +128,28 @@ async function getUserAttempts(req, res) {
   }
 }
 
+async function getUserRecentAttempts(req, res) {
+   const { user_id } = req.query;
+
+  try {
+    if (!user_id) {
+      throw new Error("User ID not Found");
+    }
+    const attempts = await AttemptsModel.find({ user_id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json(attempts);
+  } catch (error) {
+    console.error("Error fetching attempts:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   getLeaderboard,
   addAttempt,
   getTopLeaderboards,
   getUserAttempts,
+  getUserRecentAttempts,
 };

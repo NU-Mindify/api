@@ -78,9 +78,11 @@ router.get('/getWebUsers/:branch?', webusers.getUsersByBranch);
 router.put('/updateWebUsers/:id', webusers.updateWebUsers);
 router.post('/createWebUser', webusers.createWebUser);
 router.put('/deleteWebUser/:id', webusers.deleteWebUser)
+router.delete('/unapproveUser/:id', webusers.unapproveUser)
 
 router.get('/getAnalytics', analytics.getAnalytics);
 router.get('/getUserAttempts', attempts.getUserAttempts);
+  router.get('/getUserRecentAttempts', attempts.getUserRecentAttempts);
 
 //branches routes
 router.get('/getBranches', branches.getBranches);
