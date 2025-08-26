@@ -49,14 +49,17 @@ async function getAllUnapproveQuestions(req, res) {
       filter.category = category;
     }
 
-    const terms = await QuestionsModel.find(filter).sort({ word: 1 });
+    const questions = await QuestionsModel.find(filter)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ question: 1 });
 
-    res.json(terms);
+    res.json(questions);
   } catch (error) {
-    console.error("Error fetching unapproved terms:", error);
-    res.status(500).json({ error: "Failed to fetch unapproved terms" });
+    console.error("Error fetching unapproved questions:", error);
+    res.status(500).json({ error: "Failed to fetch unapproved questions" });
   }
 }
+
 
 
 
