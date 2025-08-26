@@ -66,7 +66,7 @@ async function getTotalQuestions(req, res) {
 
     const totalQuestion = await QuestionsModel.aggregate([
       {
-        $match: { is_deleted: false },
+        $match: { is_deleted: false, isApprove: true },
       },
       {
         $group: {
@@ -95,7 +95,7 @@ async function getTotalDeletedQuestions(req, res) {
 
     const totalQuestion = await QuestionsModel.aggregate([
       {
-        $match: { is_deleted: true },
+        $match: { is_deleted: true, isApprove: true },
       },
       {
         $group: {
