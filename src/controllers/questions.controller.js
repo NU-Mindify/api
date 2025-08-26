@@ -21,22 +21,44 @@ async function getQuestions(req, res) {
 
 async function getQuestionsWeb(req, res) {
   try {
-    const queries = {};
+    const queries = { isApprove: true }; 
+
     const { category, level } = req.query;
     if (category) queries.category = category;
-
     if (level) queries.level = level;
-    console.log(queries);
 
-    const questions = await QuestionsModel.find({ ...queries })
-    .collation({ locale: "en", strength: 2 })
-    .sort({ count: -1 });
+    console.log("Query filters:", queries);
+
+    const questions = await QuestionsModel.find(queries)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ count: -1 }); 
 
     res.json(questions);
   } catch (error) {
+    console.error("Error fetching approved questions:", error);
     res.status(500).json({ error: error.message });
   }
 }
+
+async function getAllUnapproveQuestions(req, res) {
+  try {
+    const { category } = req.query;
+
+    const filter = { isApprove: false };
+    if (category) {
+      filter.category = category;
+    }
+
+    const terms = await TermsModel.find(filter).sort({ word: 1 });
+
+    res.json(terms);
+  } catch (error) {
+    console.error("Error fetching unapproved terms:", error);
+    res.status(500).json({ error: "Failed to fetch unapproved terms" });
+  }
+}
+
+
 
 async function getTotalQuestions(req, res) {
   try {
@@ -63,6 +85,9 @@ async function getTotalQuestions(req, res) {
     res.status(500).json({ error });
   }
 }
+
+
+
 
 async function getTotalDeletedQuestions(req, res) {
   try {
@@ -194,6 +219,8 @@ async function deleteQuestion(req, res) {
 
 
 
+
+
 module.exports = {
   getQuestions,
   addQuestion,
@@ -202,4 +229,5 @@ module.exports = {
   getTotalQuestions,
   getQuestionsWeb,
   getTotalDeletedQuestions,
+  getAllUnapproveQuestions,
 };
