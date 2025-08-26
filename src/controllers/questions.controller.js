@@ -49,7 +49,7 @@ async function getAllUnapproveQuestions(req, res) {
       filter.category = category;
     }
 
-    const terms = await TermsModel.find(filter).sort({ word: 1 });
+    const terms = await QuestionsModel.find(filter).sort({ word: 1 });
 
     res.json(terms);
   } catch (error) {
