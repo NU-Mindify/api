@@ -221,6 +221,24 @@ async function deleteQuestion(req, res) {
 }
 
 
+async function declineQuestion(req, res) {
+  try {
+    const { id } = req.params;
+
+    const deleteQues = await QuestionsModel.findByIdAndDelete(id);
+
+    if (!deleteQues) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res.status(200).json({ message: "Question deleted successfully", deleteQues });
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
 
 
 
@@ -233,4 +251,5 @@ module.exports = {
   getQuestionsWeb,
   getTotalDeletedQuestions,
   getAllUnapproveQuestions,
+  declineQuestion,
 };

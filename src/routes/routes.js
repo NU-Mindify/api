@@ -60,6 +60,8 @@ router.get("/getTotalDeletedQuestions", questions.getTotalDeletedQuestions);
 router.post("/addQuestion", questions.addQuestion);
 router.put("/updateQuestion/:id", questions.updateQuestion);
 router.put("/deleteQuestion/:id", questions.deleteQuestion);
+router.delete("/declineQuestion/:id", questions.declineQuestion);
+
 
 router.get("/getLeaderboard", attempts.getLeaderboard);
 router.post("/addAttempt", attempts.addAttempt);

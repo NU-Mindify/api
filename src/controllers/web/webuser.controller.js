@@ -109,6 +109,7 @@ async function declineUser(req, res) {
   }
 }
 
+
 async function checkEmailExists(req, res) {
   try {
     const { email } = req.body;
