@@ -45,6 +45,9 @@ const AttemptsSchema = new Schema({
   stars:{
     type: Number,
     enum: [0, 1, 2, 3]
+  },
+  streak: {
+    type: Number,
   }
 }, {timestamps: true})
 
