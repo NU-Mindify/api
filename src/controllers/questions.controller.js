@@ -21,22 +21,47 @@ async function getQuestions(req, res) {
 
 async function getQuestionsWeb(req, res) {
   try {
-    const queries = {};
+    const queries = { isApprove: true }; 
+
     const { category, level } = req.query;
     if (category) queries.category = category;
-
     if (level) queries.level = level;
-    console.log(queries);
 
-    const questions = await QuestionsModel.find({ ...queries })
-    .collation({ locale: "en", strength: 2 })
-    .sort({ count: -1 });
+    console.log("Query filters:", queries);
+
+    const questions = await QuestionsModel.find(queries)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ count: -1 }); 
 
     res.json(questions);
   } catch (error) {
+    console.error("Error fetching approved questions:", error);
     res.status(500).json({ error: error.message });
   }
 }
+
+async function getAllUnapproveQuestions(req, res) {
+  try {
+    const { category } = req.query;
+
+    const filter = { isApprove: false };
+    if (category) {
+      filter.category = category;
+    }
+
+    const questions = await QuestionsModel.find(filter)
+      .collation({ locale: "en", strength: 2 })
+      .sort({ question: 1 });
+
+    res.json(questions);
+  } catch (error) {
+    console.error("Error fetching unapproved questions:", error);
+    res.status(500).json({ error: "Failed to fetch unapproved questions" });
+  }
+}
+
+
+
 
 async function getTotalQuestions(req, res) {
   try {
@@ -44,7 +69,7 @@ async function getTotalQuestions(req, res) {
 
     const totalQuestion = await QuestionsModel.aggregate([
       {
-        $match: { is_deleted: false },
+        $match: { is_deleted: false, isApprove: true },
       },
       {
         $group: {
@@ -64,13 +89,16 @@ async function getTotalQuestions(req, res) {
   }
 }
 
+
+
+
 async function getTotalDeletedQuestions(req, res) {
   try {
     const category = req.query.category;
 
     const totalQuestion = await QuestionsModel.aggregate([
       {
-        $match: { is_deleted: true },
+        $match: { is_deleted: true, isApprove: true },
       },
       {
         $group: {
@@ -193,6 +221,26 @@ async function deleteQuestion(req, res) {
 }
 
 
+async function declineQuestion(req, res) {
+  try {
+    const { id } = req.params;
+
+    const deleteQues = await QuestionsModel.findByIdAndDelete(id);
+
+    if (!deleteQues) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res.status(200).json({ message: "Question deleted successfully", deleteQues });
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+
+
 
 module.exports = {
   getQuestions,
@@ -202,4 +250,6 @@ module.exports = {
   getTotalQuestions,
   getQuestionsWeb,
   getTotalDeletedQuestions,
+  getAllUnapproveQuestions,
+  declineQuestion,
 };

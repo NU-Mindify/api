@@ -48,6 +48,10 @@ const QuestionsSchema = new mongoose.Schema({
   is_deleted: {
     type: Boolean,
     default: false
+  },
+  isApprove: {
+    type: Boolean,
+    default: false
   }
 })
 

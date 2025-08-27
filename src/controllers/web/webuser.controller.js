@@ -1,12 +1,12 @@
-const WebUsersModel = require('../../models/web/WebUser');
+const WebUsersModel = require("../../models/web/WebUser");
 
 async function getWebUsers(req, res) {
   try {
-    const webusers = await WebUsersModel.find()
-    res.json(webusers)
+    const webusers = await WebUsersModel.find();
+    res.json(webusers);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error })
+    res.status(500).json({ error });
   }
 }
 
@@ -29,54 +29,52 @@ async function getUsersByBranch(req, res) {
   }
 }
 
-
-
 async function getWebUser(req, res) {
   try {
-    const uid = req.params.uid
-    const webuser = await WebUsersModel.findOne({uid}) 
-    res.json(webuser)
+    const uid = req.params.uid;
+    const webuser = await WebUsersModel.findOne({ uid });
+    res.json(webuser);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error })
+    res.status(500).json({ error });
   }
 }
-
-
 
 async function loginByEmail(req, res) {
   try {
-    const email = req.params.email
-    const webUserEmail = await WebUsersModel.findOne({email}) 
-    res.json(webUserEmail)
+    const email = req.params.email;
+    const webUserEmail = await WebUsersModel.findOne({ email });
+    res.json(webUserEmail);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error })
+    res.status(500).json({ error });
   }
 }
 
-
-async function updateWebUsers (req,res) {
-   try{
-    const webUser = await WebUsersModel.findByIdAndUpdate(req.params.id, req.body, {new:true})
-    res.json(webUser)
-   }
-   catch(error){
-      console.log(err);
-      res.status(500).json({error:"Internal Server Error"});
-   };
+async function updateWebUsers(req, res) {
+  try {
+    const webUser = await WebUsersModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(webUser);
+  } catch (error) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 const createWebUser = (req, res) => {
   const newWebUser = new WebUsersModel(req.body);
-  newWebUser.save()
-   .then(webuser => res.json(webuser))
-   .catch(err=>{
-    console.log(err);
-    res.status(500).json({error:"Internal Server Error"})
-   })
-}
-
+  newWebUser
+    .save()
+    .then((webuser) => res.json(webuser))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+};
 
 async function deleteWebUser(req, res) {
   try {
@@ -84,7 +82,7 @@ async function deleteWebUser(req, res) {
 
     const deletedUser = await WebUsersModel.findByIdAndUpdate(
       user_id,
-      { $set: { "is_deleted": is_deleted } },
+      { $set: { is_deleted: is_deleted } },
       { new: true, runValidators: true }
     );
     res.json(deletedUser);
@@ -94,10 +92,9 @@ async function deleteWebUser(req, res) {
   }
 }
 
-
 async function declineUser(req, res) {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
 
     const deletedUser = await WebUsersModel.findByIdAndDelete(id);
 
@@ -113,6 +110,34 @@ async function declineUser(req, res) {
 }
 
 
+async function checkEmailExists(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
 
+    const user = await WebUsersModel.findOne({ email: email.toLowerCase() });
 
-module.exports = { getWebUsers , getWebUser, updateWebUsers, createWebUser, getUsersByBranch, loginByEmail, deleteWebUser, declineUser }
+    if (user) {
+      return res.json({ exists: true });
+    } else {
+      return res.json({ exists: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+module.exports = {
+  getWebUsers,
+  getWebUser,
+  updateWebUsers,
+  createWebUser,
+  getUsersByBranch,
+  loginByEmail,
+  deleteWebUser,
+  declineUser,
+  checkEmailExists
+};
