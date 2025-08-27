@@ -239,6 +239,33 @@ async function declineQuestion(req, res) {
 }
 
 
+async function approveQuestion(req, res) {
+  try {
+    const { id } = req.params;
+
+    
+    const updatedQuestion = await Question.findByIdAndUpdate(
+      id,
+      { isApprove: true },
+      { new: true } 
+    );
+
+    if (!updatedQuestion) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.status(200).json({
+      message: "Question approved successfully",
+      question: updatedQuestion,
+    });
+  } catch (error) {
+    console.error("Error approving question:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+
 
 
 
@@ -252,4 +279,5 @@ module.exports = {
   getTotalDeletedQuestions,
   getAllUnapproveQuestions,
   declineQuestion,
+  approveQuestion
 };
