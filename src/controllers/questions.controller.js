@@ -242,9 +242,10 @@ async function declineQuestion(req, res) {
 async function approveQuestion(req, res) {
   try {
     const { id } = req.params;
+    
 
     
-    const updatedQuestion = await Question.findByIdAndUpdate(
+    const updatedQuestion = await QuestionsModel.findByIdAndUpdate(
       id,
       { isApprove: true },
       { new: true } 
