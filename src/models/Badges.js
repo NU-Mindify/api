@@ -15,6 +15,9 @@ const BadgesSchema = new mongoose.Schema({
   filepath:{
     type: String,
     required: true
+  },
+  name: {
+    type: String
   }
 }, {timestamps: true})
 

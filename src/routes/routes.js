@@ -8,6 +8,7 @@ const questions = require("../controllers/questions.controller");
 const attempts = require("../controllers/attempts.controller");
 const badges = require("../controllers/badges.controller");
 const mindmap = require("../controllers/mindmap.controller");
+const sessions = require("../controllers/sessions.controller")
 
 const webusers = require("../controllers/web/webuser.controller");
 const analytics = require("../controllers/web/analytics.controller");
@@ -34,6 +35,8 @@ router.get("/userBuy", users.userBuy);
 router.get("/addPoints", users.addPoints);
 router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
+
+router.post("/addSession", sessions.addSession);
 
 router.get("/getTerms", terms.getTerms);
 router.get("/getDeletedTerms", terms.getDeletedTerms);
