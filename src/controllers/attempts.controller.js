@@ -129,7 +129,7 @@ async function getUserAttempts(req, res) {
 }
 
 async function getUserRecentAttempts(req, res) {
-   const { user_id } = req.query;
+  const { user_id } = req.query;
 
   try {
     if (!user_id) {
@@ -146,10 +146,30 @@ async function getUserRecentAttempts(req, res) {
   }
 }
 
+async function getDailyActiveUsers(req, res) {
+  try {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const activeUsers = await AttemptsModel.distinct("user_id", {
+      createdAt: { $gte: todayStart, $lte: todayEnd },
+    });
+
+    res.json({ dau: activeUsers.length });
+  } catch (error) {
+    console.error("Error fetching DAU:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getLeaderboard,
   addAttempt,
   getTopLeaderboards,
   getUserAttempts,
   getUserRecentAttempts,
+  getDailyActiveUsers,
 };
