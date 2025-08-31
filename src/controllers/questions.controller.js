@@ -138,6 +138,31 @@ async function addQuestion(req, res) {
   }
 }
 
+
+async function addQuestionAdmin(req, res) {
+  try {
+    if (!req.body || (Array.isArray(req.body) && req.body.length === 0)) {
+      return res.status(400).json({ error: "Empty body or array is not allowed" });
+    }
+
+    if (Array.isArray(req.body)) {
+      const questions = await QuestionsModel.insertMany(
+        req.body.map(q => ({ ...q, isApprove: true }))
+      );
+      return res.status(201).json(questions);
+    }
+
+
+    const newQuestion = new QuestionsModel({ ...req.body, isApprove: true });
+    const saveQuestion = await newQuestion.save();
+    res.status(201).json(saveQuestion);
+
+  } catch (error) {
+    res.status(422).json({ error });
+  }
+}
+
+
 async function updateQuestion(req, res) {
   try {
     const { id } = req.params;
@@ -280,5 +305,6 @@ module.exports = {
   getTotalDeletedQuestions,
   getAllUnapproveQuestions,
   declineQuestion,
-  approveQuestion
+  approveQuestion,
+  addQuestionAdmin
 };

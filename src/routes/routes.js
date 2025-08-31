@@ -58,6 +58,7 @@ router.get("/getAllUnapproveQuestions", questions.getAllUnapproveQuestions);
 router.get("/getTotalQuestions", questions.getTotalQuestions);
 router.get("/getTotalDeletedQuestions", questions.getTotalDeletedQuestions);
 router.post("/addQuestion", questions.addQuestion);
+router.post("/addQuestionAdmin", questions.addQuestionAdmin);
 router.put("/updateQuestion/:id", questions.updateQuestion);
 router.put("/deleteQuestion/:id", questions.deleteQuestion);
 router.delete("/declineQuestion/:id", questions.declineQuestion);
