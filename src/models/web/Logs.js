@@ -17,6 +17,10 @@ const LogsSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    useravatar: {
+        type: String,
+        required: true
     }
 }, { timestamps: true })
 
