@@ -129,7 +129,7 @@ async function getUserAttempts(req, res) {
 }
 
 async function getUserRecentAttempts(req, res) {
-   const { user_id } = req.query;
+  const { user_id } = req.query;
 
   try {
     if (!user_id) {
