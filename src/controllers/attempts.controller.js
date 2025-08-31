@@ -146,41 +146,10 @@ async function getUserRecentAttempts(req, res) {
   }
 }
 
-async function getDailyActiveUsers(req, res) {
-  try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const dauResult = await AttemptsModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: today },
-        },
-      },
-      {
-        $group: {
-          _id: "$user_id",
-        },
-      },
-      {
-        $count: "dau",
-      },
-    ]);
-
-    const dau = dauResult.length > 0 ? dauResult[0].dau : 0;
-
-    res.json({ dau });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
-  }
-}
-
 module.exports = {
   getLeaderboard,
   addAttempt,
   getTopLeaderboards,
   getUserAttempts,
   getUserRecentAttempts,
-  getDailyActiveUsers,
 };
