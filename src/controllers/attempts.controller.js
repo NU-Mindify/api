@@ -148,19 +148,30 @@ async function getUserRecentAttempts(req, res) {
 
 async function getDailyActiveUsers(req, res) {
   try {
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59, 999);
+    const dauResult = await AttemptsModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: today },
+        },
+      },
+      {
+        $group: {
+          _id: "$user_id",
+        },
+      },
+      {
+        $count: "dau",
+      },
+    ]);
 
-    const activeUsers = await AttemptsModel.distinct("user_id", {
-      createdAt: { $gte: todayStart, $lte: todayEnd },
-    });
+    const dau = dauResult.length > 0 ? dauResult[0].dau : 0;
 
-    res.json({ dau: activeUsers.length });
+    res.json({ dau });
   } catch (error) {
-    console.error("Error fetching DAU:", error);
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 }
