@@ -30,4 +30,25 @@ const addBranches = (req, res) => {
      })
 }
 
-module.exports = { getBranches, addBranches, getDeleteBranches }
+const deleteBranch = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedBranch = await BranchesModel.findByIdAndDelete(id);
+
+    if (!deletedBranch) {
+      return res.status(404).json({ message: "Branch not found" });
+    }
+
+    res.status(200).json({ 
+      message: "Branch deleted successfully", 
+      deletedBranch 
+    });
+  } catch (error) {
+    console.error("Error deleting branch:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+
+module.exports = { getBranches, addBranches, getDeleteBranches, deleteBranch }
