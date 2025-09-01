@@ -32,11 +32,11 @@ const addBranches = (req, res) => {
 
 const deleteBranch = async (req, res) => {
   try {
-    const {branchId, is_deleted} = req.body;
+    const {id} = req.query;
 
     const deletedBranch = await BranchesModel.findByIdAndUpdate(
-        branchId, 
-        { is_deleted }, 
+        id, 
+        { is_deleted: true }, 
         { new: true }
     );
 
