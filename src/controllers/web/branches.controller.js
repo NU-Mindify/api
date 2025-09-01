@@ -2,7 +2,17 @@ const BranchesModel = require('../../models/web/Branches');
 
 async function getBranches(req, res){
     try{
-        const branches = await BranchesModel.find()
+        const branches = await BranchesModel.find({is_deleted: false})
+        res.json(branches)
+    } catch (error){
+        console.log(error);
+        res.status(500).json({error})
+    }
+}
+
+async function getDeleteBranches(req, res){
+    try{
+        const branches = await BranchesModel.find({is_deleted: true})
         res.json(branches)
     } catch (error){
         console.log(error);
@@ -20,4 +30,4 @@ const addBranches = (req, res) => {
      })
 }
 
-module.exports = { getBranches, addBranches }
+module.exports = { getBranches, addBranches, getDeleteBranches }
