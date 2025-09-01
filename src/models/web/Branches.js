@@ -17,6 +17,10 @@ const BranchesSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  stud_extension: {
+    type: String,
+    required: true,
+  }
 }, { timestamps: true });
 
 const BranchesModel = mongoose.model("branches", BranchesSchema);
