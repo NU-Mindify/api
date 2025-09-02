@@ -18,17 +18,22 @@ async function addSession(req, res) {
 
 async function getAverageSessionTime(req, res) {
   try {
+    const { user } = req.query; 
+    const matchStage = { duration: { $exists: true, $ne: null } };
+    if (user) {
+      matchStage.user = { $elemMatch: { $eq: mongoose.Types.ObjectId(user) } };
+    }
     const result = await SessionsModel.aggregate([
-      { $match: { duration: { $exists: true, $ne: null } } },
+      { $match: matchStage },
       { $group: { _id: null, avgDuration: { $avg: "$duration" } } }
     ]);
-    const avgDuration = result.length > 0 ? result[0].avgDuration : 0;
-    res.json({ averageSessionTime: avgDuration });
+    const avgDurationMinutes = result.length > 0 ? result[0].avgDuration / 60 : 0;
+    res.json({ averageSessionTimeMinutes: avgDurationMinutes });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
   }
 }
-rs
+
 
 module.exports = {addSession, getAverageSessionTime}
