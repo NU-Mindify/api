@@ -37,6 +37,7 @@ router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
 
 router.post("/addSession", sessions.addSession);
+router.get("/getAverageSessionTime", sessions.getAverageSessionTime);
 
 router.get("/getTerms", terms.getTerms);
 router.get("/getDeletedTerms", terms.getDeletedTerms);
@@ -82,7 +83,7 @@ router.get("/removeTutorial", users.removeTutorial);
 
 // Web exclusive routes
 router.get("/getWebUsers", webusers.getWebUsers);
-router.get("/getWebUser/:uid", webusers.getWebUser);
+router.get("/getWebUser/:uid", webusers.getWebUser); 
 router.get("/login/:email", webusers.loginByEmail);
 router.get("/getWebUsers/:branch?", webusers.getUsersByBranch);
 router.put("/updateWebUsers/:id", webusers.updateWebUsers);
