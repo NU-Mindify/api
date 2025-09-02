@@ -25,7 +25,6 @@ const QuestionsSchema = new mongoose.Schema({
   level: Number,
   question:{
     type: String,
-    required: true
   },
   timer:{
     type: Number,
