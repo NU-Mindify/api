@@ -55,7 +55,7 @@ const QuestionsSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-})
+}, {timestamps: true})
 
 const QuestionsModel = mongoose.model("questions", QuestionsSchema)
 
