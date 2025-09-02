@@ -35,7 +35,10 @@ const QuestionsSchema = new mongoose.Schema({
     require: true,
     enum:['easy', 'average', 'difficult']
   },
-  item_number: Number,
+  item_number: {
+    type: Number,
+    required: true
+  },
   choices: [choiceSchema],
   rationale: String,
   answer:{
