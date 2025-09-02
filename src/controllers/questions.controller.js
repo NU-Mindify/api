@@ -3,13 +3,39 @@ const QuestionsModel = require("../models/Questions");
 async function getQuestions(req, res) {
   try {
     const queries = {};
-    const { category, level, start, end } = req.query;
+    const { category, level, start, end, difficulty, limit } = req.query;
     if (category) queries.category = category;
     if (start && end)
       queries.item_number = { $gte: parseInt(start), $lte: parseInt(end) };
     if (level) queries.level = level;
-    console.log(queries);
+    const aggregation = [
+      {
+        $match: {
+          category: category,
+          difficulty: difficulty,
+          is_deleted: false,
+          isApprove: true
+        }
+      },
+      {
+        $sample: {
+          size: parseInt(limit)
+        }
+      },
+      {
+        $project: {
+          rationale: 0,
+          is_deleted: 0,
+          isApprove: 0
+        }
+      }
+    ]
 
+    if(difficulty && limit){
+      const randomQuestions = await QuestionsModel.aggregate(aggregation);
+      res.json(randomQuestions);
+      return;
+    }
 
     const questions = await QuestionsModel.find({ ...queries }).limit(100);
     res.json(questions);
