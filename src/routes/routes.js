@@ -97,6 +97,9 @@ router.get("/getUserRecentAttempts", attempts.getUserRecentAttempts);
 
 //branches routes
 router.get("/getBranches", branches.getBranches);
+router.get("/getDeleteBranches", branches.getDeleteBranches);
+router.put("/deleteBranch", branches.deleteBranch);
+router.put("/activateBranch", branches.activateBranch);
 router.post("/addBranches", branches.addBranches);
 
 //system logs routes

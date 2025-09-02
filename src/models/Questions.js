@@ -25,7 +25,6 @@ const QuestionsSchema = new mongoose.Schema({
   level: Number,
   question:{
     type: String,
-    required: true
   },
   timer:{
     type: Number,
@@ -36,7 +35,10 @@ const QuestionsSchema = new mongoose.Schema({
     require: true,
     enum:['easy', 'average', 'difficult']
   },
-  item_number: Number,
+  item_number: {
+    type: Number,
+    required: true
+  },
   choices: [choiceSchema],
   rationale: String,
   answer:{
@@ -53,7 +55,7 @@ const QuestionsSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-})
+}, {timestamps: true})
 
 const QuestionsModel = mongoose.model("questions", QuestionsSchema)
 
