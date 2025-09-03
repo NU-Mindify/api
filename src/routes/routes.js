@@ -37,7 +37,7 @@ router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
 
 router.post("/addSession", sessions.addSession);
-router.get("/getAverageSessionTime", sessions.getAverageSessionTime);
+router.get("/getRecentSessions", sessions.getRecentSessions);
 
 router.get("/getTerms", terms.getTerms);
 router.get("/getDeletedTerms", terms.getDeletedTerms);

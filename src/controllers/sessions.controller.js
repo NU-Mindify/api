@@ -16,24 +16,32 @@ async function addSession(req, res) {
   }
 }
 
-async function getAverageSessionTime(req, res) {
+
+async function getRecentSessions(req, res) {
   try {
-    const { user } = req.query; 
-    const matchStage = { duration: { $exists: true, $ne: null } };
-    if (user) {
-      matchStage.user = { $elemMatch: { $eq: mongoose.Types.ObjectId(user) } };
+    const { id } = req.query; 
+
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
     }
-    const result = await SessionsModel.aggregate([
-      { $match: matchStage },
-      { $group: { _id: null, avgDuration: { $avg: "$duration" } } }
-    ]);
-    const avgDurationMinutes = result.length > 0 ? result[0].avgDuration / 60 : 0;
-    res.json({ averageSessionTimeMinutes: avgDurationMinutes });
+
+
+    const sessions = await SessionsModel.find({ userId: id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    if (sessions.length === 0) {
+      return res.status(404).json({ message: "No sessions found for this user" });
+    }
+
+    res.json(sessions)
+
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
+    console.error("Error fetching average session time:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
 
-module.exports = {addSession, getAverageSessionTime}
+
+module.exports = {addSession, getRecentSessions}
