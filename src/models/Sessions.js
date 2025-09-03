@@ -15,10 +15,10 @@ const sessionsSchema = Schema({
     type: Number,
     required: false
   },
-  user: [{
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'users',
-  }],
+  },
 })
 
 const SessionsModel = mongoose.model("sessions", sessionsSchema)
