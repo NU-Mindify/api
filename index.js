@@ -14,7 +14,16 @@ const app = express();
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self';"
+    "default-src 'self'; " +
+    "script-src 'self'; " +
+    "style-src 'self' 'unsafe-inline'; " +
+    "img-src 'self' data:; " +
+    "font-src 'self'; " +
+    "connect-src 'self' https://your-api-domain.com; " +
+    "object-src 'none'; " +
+    "base-uri 'self'; " +
+    "frame-ancestors 'self'; " +
+    "form-action 'self';"
   );
   res.setHeader("X-Content-Type-Options", "nosniff");    
   res.setHeader("X-Frame-Options", "DENY");            
