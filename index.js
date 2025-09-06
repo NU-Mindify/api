@@ -2,6 +2,7 @@ require("dotenv").config()
 
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const userRoutes = require('./src/routes/routes');
 const mongoose = require('mongoose');
 
@@ -9,6 +10,8 @@ const PORT = process.env.PORT || 8080
 const uri = process.env.MONGO;
 
 const app = express();
+
+app.use(compression());
 
 
 app.use((req, res, next) => {
