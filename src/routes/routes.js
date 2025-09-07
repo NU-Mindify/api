@@ -41,6 +41,7 @@ router.post("/checkUsernameExists", users.checkUsernameExists);
 
 router.post("/addSession", sessions.addSession);
 router.get("/getRecentSessions", sessions.getRecentSessions);
+router.get("/getAverageSession", sessions.getAverageSession);
 
 router.get("/getTerms", terms.getTerms);
 router.get("/getLatestUpdatedTerm", terms.getLatestUpdatedTerm)

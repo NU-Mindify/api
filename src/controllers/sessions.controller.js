@@ -37,6 +37,31 @@ async function getRecentSessions(req, res) {
     res.json(sessions)
 
   } catch (error) {
+    console.error("Error fetching recent session time:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getAverageSession(req, res) {
+  try {
+    const result = await SessionsModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalDuration: { $sum: "$duration" }, 
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No sessions found" });
+    }
+
+    const averageSessionTime = result[0].totalDuration / result[0].count;
+
+    res.json({ averageSessionTime });
+  } catch (error) {
     console.error("Error fetching average session time:", error);
     res.status(500).json({ error: "Internal server error" });
   }
@@ -44,4 +69,6 @@ async function getRecentSessions(req, res) {
 
 
 
-module.exports = {addSession, getRecentSessions}
+
+
+module.exports = {addSession, getRecentSessions, getAverageSession}
