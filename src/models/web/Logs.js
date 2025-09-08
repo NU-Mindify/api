@@ -18,6 +18,10 @@ const LogsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    position: {
+        type: String,
+        required: true
+    },
     useravatar: {
         type: String,
         required: true
