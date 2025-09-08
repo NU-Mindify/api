@@ -63,6 +63,16 @@ const UsersSchema = new mongoose.Schema({
       default: true
     }
   },
+  settings: {
+    music:{
+      type: Boolean,
+      default: true,
+    },
+    sfx:{
+      type: Boolean,
+      default: true,
+    }
+  },
   items:{
     type: [String],
     default: ["bulldog", "b1", "g1", "female_unform", "male_unform"]

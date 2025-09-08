@@ -142,6 +142,23 @@ async function removeTutorial(req, res) {
   }
 }
 
+async function changeSettings(req, res){
+  try {
+    const { user_id, music, sfx } = req.body
+    const result = await UsersModel.findByIdAndUpdate(
+      {_id: user_id},
+      { $set: { ["settings.music"]: music, ["settings.sfx"]: sfx } },
+      { new: true, runValidators: true }
+    )
+    console.log(result);
+    
+    res.json(result)
+  } catch (error) {
+    res.status(500).json({ error })
+    console.error(error);
+  }
+}
+
 async function deleteStudent(req, res) {
   try {
     const { user_id, is_deleted } = req.body;
@@ -186,4 +203,4 @@ async function checkUsernameExists(req, res) {
   }
 }
 
-module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists }
+module.exports = { getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists, changeSettings }

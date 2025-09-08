@@ -85,6 +85,7 @@ router.get("/getUserBadges", badges.getUserBadges);
 router.get("/getTopEarnedBadges", badges.getTopEarnedBadges);
 
 router.get("/removeTutorial", users.removeTutorial);
+router.post("/changeSettings", users.changeSettings);
 
 // Web exclusive routes
 router.get("/getWebUsers", webusers.getWebUsers);

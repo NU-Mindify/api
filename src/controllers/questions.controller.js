@@ -24,7 +24,6 @@ async function getQuestions(req, res) {
       },
       {
         $project: {
-          rationale: 0,
           is_deleted: 0,
           isApprove: 0
         }
