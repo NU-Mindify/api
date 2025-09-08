@@ -50,6 +50,7 @@ router.get("/getLimitedTerms/:start/:end", terms.getLimitedTerms);
 router.post("/addTerm", terms.addTerm);
 router.put("/updateTerm/:id", terms.updateTerm);
 router.put("/deleteTerm/:id", terms.deleteTerm);
+router.put("/unarchiveTerm/:id", terms.unarchiveTerm)
 
 router.get("/getProgress/:id", progress.getUserProgress);
 router.get("/getAllProgress", progress.getAllProgress);
