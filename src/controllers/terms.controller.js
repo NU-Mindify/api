@@ -95,4 +95,21 @@ async function deleteTerm(req, res) {
   }
 }
 
-module.exports = { getTerms, addTerm, updateTerm, deleteTerm, getLimitedTerms, getDeletedTerms, getLatestUpdatedTerm };
+async function unarchiveTerm(req, res) {
+  try {
+    const { term_id, is_deleted } = req.body;
+    const deletedTerm = await TermsModel.findByIdAndUpdate(
+      term_id,
+      { $set: { is_deleted } },
+      { new: true, runValidators: true }
+    );
+    console.log("DeleteTerm:", deletedTerm);
+    res.json(deletedTerm);
+  } catch (error) {
+    console.error("Error updating term:", error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+module.exports = { getTerms, addTerm, updateTerm, deleteTerm, getLimitedTerms, getDeletedTerms, getLatestUpdatedTerm, unarchiveTerm };
