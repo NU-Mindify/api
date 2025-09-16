@@ -12,7 +12,7 @@ async function getMessages(req, res) {
         { recepient_id: user_id }
       ]
     })
-    .sort({ created_at: 1 })
+    .sort({ createdAt: 1 })
 
     res.json(messages);
   } catch (error) {
