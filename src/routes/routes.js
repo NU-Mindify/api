@@ -9,6 +9,7 @@ const attempts = require("../controllers/attempts.controller");
 const badges = require("../controllers/badges.controller");
 const mindmap = require("../controllers/mindmap.controller");
 const sessions = require("../controllers/sessions.controller")
+const weekly_scores = require("../controllers/weeklyscores.controller")
 
 const config = require("../controllers/config.controller")
 
@@ -79,6 +80,7 @@ router.put("/approveQuestion/:id", questions.approveQuestion);
 router.get("/getLeaderboard", attempts.getLeaderboard);
 router.post("/addAttempt", attempts.addAttempt);
 router.get("/getTopLeaderboards", attempts.getTopLeaderboards);
+router.get("/getWeeklyLeaderboard", weekly_scores.getWeeklyLeaderboard)
 
 router.post("/addBadge", badges.addBadge);
 router.post("/addUserBadge", badges.addUserBadge);

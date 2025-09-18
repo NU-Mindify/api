@@ -1,5 +1,6 @@
 const AttemptsModel = require("../models/Attempts");
 const ProgressModel = require("../models/Progress");
+const WeeklyScoresModel = require("../models/WeeklyScores");
 
 async function getLeaderboard(req, res) {
   try {
@@ -41,7 +42,17 @@ async function addAttempt(req, res) {
 
     const newAttempt = new AttemptsModel(req.body.attempt);
     const attempt = await newAttempt.save();
-    const { mode, category, user_id, level } = req.body.attempt;
+    const { mode, category, user_id, level, points } = req.body.attempt;
+
+    const userScore = await WeeklyScoresModel.findOneAndUpdate(
+      { user_id: user_id },
+      { $inc: { points: points } },
+      { new: true, upsert: true }
+    );
+
+    console.log(userScore);
+    
+
     if (mode === "competition") {
       const highestScore = await AttemptsModel.findOne({
         user_id,
