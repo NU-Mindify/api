@@ -29,6 +29,8 @@ router.get("/", (req, res) =>
   `)
 );
 
+router.get("/getAppConfig", config.getConfig)
+
 router.get("/getUsers", users.getUsers);
 router.get("/getUser", users.getUser);
 router.get("/searchUser", users.searchUser);

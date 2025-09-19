@@ -100,7 +100,7 @@ async function userBuy(req, res) {
   try {
     const newData = await UsersModel.findByIdAndUpdate(
       user_id,
-      { $push: { items: item }, $inc: {points: -5} },
+      { $push: { items: item }, $inc: {points: -10} },
       { new: true } 
     )
     res.json(newData)
