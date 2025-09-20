@@ -187,14 +187,27 @@ async function checkUsernameExists(req, res) {
 }
 
 
-async function updateAccountExpiryDate(req, res) {
+async function updateAccountLifespan(req, res) {
   try {
-   
+    const { user_id } = req.body;
+
+    const updatedUser = await UsersModel.findByIdAndUpdate(
+      user_id,
+      { $set: { lifespan: 1825 } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(updatedUser);
   } catch (error) {
-    console.error(error);
+    console.error("Error updating account expiry date:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 
 
 cron.schedule("0 0 * * *", async () => {
@@ -214,5 +227,5 @@ cron.schedule("0 0 * * *", async () => {
 });
 
 
-module.exports = {getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists, changeSettings, updateAccountExpiryDate
+module.exports = {getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists, changeSettings, updateAccountLifespan
 };

@@ -41,6 +41,7 @@ router.get("/addPoints", users.addPoints);
 router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
 router.post("/checkUsernameExists", users.checkUsernameExists);
+router.put("/updateAccountLifespan", users.updateAccountLifespan)
 
 router.post("/addSession", sessions.addSession);
 router.get("/getRecentSessions", sessions.getRecentSessions);
