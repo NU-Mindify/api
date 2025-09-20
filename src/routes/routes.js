@@ -41,7 +41,7 @@ router.get("/addPoints", users.addPoints);
 router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);
 router.post("/checkUsernameExists", users.checkUsernameExists);
-router.put("/updateAccountLifespan", users.updateAccountLifespan)
+router.put("/updateAccountLifespan/:id", users.updateAccountLifespan)
 
 router.post("/addSession", sessions.addSession);
 router.get("/getRecentSessions", sessions.getRecentSessions);
@@ -104,6 +104,7 @@ router.post("/createWebUser", webusers.createWebUser);
 router.put("/deleteWebUser/:id", webusers.deleteWebUser);
 router.delete("/declineUser/:id", webusers.declineUser);
 router.post("/check-email", webusers.checkEmailExists);
+router.put("/tryUpdateTTL/:id", webusers.tryUpdateTTL)
 
 router.get("/getAnalytics", analytics.getAnalytics);
 router.get("/getUserAttempts", attempts.getUserAttempts);
