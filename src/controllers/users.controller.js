@@ -1,6 +1,7 @@
 const UsersModel = require('../models/Users');
 const ProgressModel = require('../models/Progress');
-const cron = require("node-cron");
+const Agenda = require("agenda");
+const agenda = new Agenda({ mongo: mongoose.connection });
 
 
 
@@ -210,13 +211,10 @@ async function updateAccountLifespan(req, res) {
 
 
 
-cron.schedule("*/10 * * * * *", async () => {
+
+
+agenda.define("decrement lifespan", async job => {
   try {
-    console.log("Cron running");
-
-    const matchedUsers = await UsersModel.countDocuments({ lifespan: { $gt: 0 } });
-    console.log("Users to decrement:", matchedUsers);
-
     const updated = await UsersModel.updateMany(
       { lifespan: { $gt: 0 } },
       { $inc: { lifespan: -1 } }
@@ -225,13 +223,16 @@ cron.schedule("*/10 * * * * *", async () => {
 
     const deleted = await UsersModel.deleteMany({ lifespan: { $lte: 0 } });
     console.log("Deleted users:", deleted.deletedCount);
-
   } catch (error) {
-    console.error("Error in lifespan cron:", error);
+    console.error("Error decrementing lifespan:", error);
   }
-}, {
-  timezone: "Asia/Manila"
 });
+
+(async function() {
+  await agenda.start();
+  await agenda.every("30 seconds", "decrement lifespan");
+})();
+
 
 
 
