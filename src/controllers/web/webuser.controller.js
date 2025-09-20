@@ -66,15 +66,20 @@ async function updateWebUsers(req, res) {
 }
 
 const createWebUser = (req, res) => {
-  const newWebUser = new WebUsersModel(req.body);
+  const newWebUser = new WebUsersModel({
+    ...req.body,
+    lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000)
+  });
+
   newWebUser
     .save()
     .then((webuser) => res.json(webuser))
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       res.status(500).json({ error: "Internal Server Error" });
     });
 };
+
 
 async function deleteWebUser(req, res) {
   try {

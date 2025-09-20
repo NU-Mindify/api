@@ -50,6 +50,11 @@ const WebUsersSchema = new mongoose.Schema({
     required: true,
     default: false
   },
+  lifespan: { 
+    type: Date, 
+    required: true, 
+    index: { expires: 0 } 
+  }
 
   }, { timestamps: true })
 
