@@ -1,6 +1,7 @@
 const UsersModel = require('../models/Users');
 const ProgressModel = require('../models/Progress');
 const Agenda = require("agenda");
+const mongoose = require("mongoose");
 const agenda = new Agenda({ mongo: mongoose.connection });
 
 
