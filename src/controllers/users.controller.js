@@ -210,7 +210,7 @@ async function updateAccountLifespan(req, res) {
 
 
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("10 0 * * *", async () => {
   try {
     
     await UsersModel.updateMany(
