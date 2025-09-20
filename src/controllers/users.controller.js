@@ -210,21 +210,26 @@ async function updateAccountLifespan(req, res) {
 
 
 
-cron.schedule("10 0 * * *", async () => {
+cron.schedule("5 0 * * *", async () => {
   try {
-    
-    await UsersModel.updateMany(
+    console.log("Cron running at 12:10 AM PHT");
+
+    const updated = await UsersModel.updateMany(
       { lifespan: { $gt: 0 } },
       { $inc: { lifespan: -1 } }
     );
+    console.log("Updated users:", updated.modifiedCount);
 
-    
-    await UsersModel.deleteMany({ lifespan: { $lte: 0 } });
+    const deleted = await UsersModel.deleteMany({ lifespan: { $lte: 0 } });
+    console.log("Deleted users:", deleted.deletedCount);
 
   } catch (error) {
-    console.error("Error in lifespan", error);
+    console.error("Error in lifespan cron:", error);
   }
+}, {
+  timezone: "Asia/Manila"
 });
+
 
 
 module.exports = {getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists, changeSettings, updateAccountLifespan
