@@ -210,9 +210,12 @@ async function updateAccountLifespan(req, res) {
 
 
 
-cron.schedule("5 0 * * *", async () => {
+cron.schedule("*/10 * * * * *", async () => {
   try {
-    console.log("Cron running at 12:10 AM PHT");
+    console.log("Cron running");
+
+    const matchedUsers = await UsersModel.countDocuments({ lifespan: { $gt: 0 } });
+    console.log("Users to decrement:", matchedUsers);
 
     const updated = await UsersModel.updateMany(
       { lifespan: { $gt: 0 } },
@@ -229,6 +232,7 @@ cron.schedule("5 0 * * *", async () => {
 }, {
   timezone: "Asia/Manila"
 });
+
 
 
 
