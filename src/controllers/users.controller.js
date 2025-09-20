@@ -2,42 +2,39 @@ const UsersModel = require('../models/Users');
 const ProgressModel = require('../models/Progress');
 
 
-
-
 async function getUsers(req, res) {
   try {
     const users = await UsersModel.find();
     res.json(users);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ error });
   }
 }
 
+
 async function getUser(req, res) {
   try {
     const { user_id, uid } = req.query;
-    if (uid) {
-      const user = await UsersModel.findOne({ uid });
-      return res.json(user);
-    }
-    if (user_id) {
-      const user = await UsersModel.findById(user_id);
-      return res.json(user);
-    }
-    throw new Error("No uid or user_id provided");
+    let user;
+    if (uid) user = await UsersModel.findOne({ uid });
+    else if (user_id) user = await UsersModel.findById(user_id);
+    else throw new Error("No uid or user_id provided");
+
+    res.json(user);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({ error });
   }
 }
+
 
 async function searchUser(req, res) {
   try {
     const { name } = req.query;
     const regex = new RegExp(name, 'i');
 
-    const user = await UsersModel.aggregate([
+    const users = await UsersModel.aggregate([
       {
         $addFields: {
           full_name: { $concat: ['$first_name', ' ', '$last_name'] }
@@ -58,131 +55,153 @@ async function searchUser(req, res) {
       }
     ]);
 
-    res.json(user);
+    res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json({ error });
   }
 }
 
+
 async function createUser(req, res) {
   try {
-    const newUser = new UsersModel(req.body);
+    const newUser = new UsersModel({
+      ...req.body,
+     
+      lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000)
+    });
+
     const user = await newUser.save();
     res.json(user);
   } catch (error) {
-    res.status(500).json({ error });
     console.error(error);
+    res.status(500).json({ error });
   }
 }
+
 
 async function updateUser(req, res) {
   try {
     const { user_id, avatar, cloth, username } = req.body;
-    const result = await UsersModel.findByIdAndUpdate(
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
-      { $set: { avatar, cloth, username } },
+      { avatar, cloth, username },
       { new: true, runValidators: true }
     );
-    console.log("UpdateUser:", result);
-    res.json(result);
+
+    res.json(user);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error });
   }
 }
 
+
 async function userBuy(req, res) {
-  const { user_id, item } = req.query;
   try {
-    const newData = await UsersModel.findByIdAndUpdate(
+    const { user_id, item } = req.query;
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
       { $push: { items: item }, $inc: { points: -10 } },
       { new: true }
     );
-    res.json(newData);
+
+    res.json(user);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error });
   }
 }
 
+
 async function addPoints(req, res) {
-  const { user_id, stars } = req.query;
   try {
-    const newData = await UsersModel.findByIdAndUpdate(
+    const { user_id, stars } = req.query;
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
       { $inc: { points: stars } },
       { new: true }
     );
-    res.json(newData);
+
+    res.json(user);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error });
   }
 }
+
 
 async function removeTutorial(req, res) {
   try {
     const { user_id, tutorial } = req.query;
-    const tutorialPath = `tutorial.${tutorial}`;
-    const result = await UsersModel.findByIdAndUpdate(
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
-      { $set: { [tutorialPath]: false } },
+      { $set: { [`tutorial.${tutorial}`]: false } },
       { new: true, runValidators: true }
     );
-    res.json(result);
+
+    res.json(user);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error });
   }
 }
+
 
 async function changeSettings(req, res) {
   try {
     const { user_id, music, sfx } = req.body;
-    const result = await UsersModel.findByIdAndUpdate(
-      { _id: user_id },
+    const user = await UsersModel.findByIdAndUpdate(
+      user_id,
       { $set: { "settings.music": music, "settings.sfx": sfx } },
       { new: true, runValidators: true }
     );
-    res.json(result);
+
+    res.json(user);
   } catch (error) {
-    res.status(500).json({ error });
     console.error(error);
+    res.status(500).json({ error });
   }
 }
+
 
 async function deleteStudent(req, res) {
   try {
     const { user_id, is_deleted } = req.body;
-    const deletedUser = await UsersModel.findByIdAndUpdate(
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
-      { $set: { is_deleted } },
+      { is_deleted },
       { new: true, runValidators: true }
     );
-    res.json(deletedUser);
+
+    res.json(user);
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ error });
   }
 }
+
 
 async function checkEmailExists(req, res) {
   try {
     const { email } = req.body;
-    const User = await UsersModel.findOne({ email });
-    res.json({ exists: !!User });
+    const exists = await UsersModel.exists({ email });
+    res.json({ exists: !!exists });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error });
   }
 }
+
 
 async function checkUsernameExists(req, res) {
   try {
     const { username } = req.body;
-    const User = await UsersModel.findOne({ username });
-    res.json({ exists: !!User });
+    const exists = await UsersModel.exists({ username });
+    res.json({ exists: !!exists });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error });
   }
 }
 
@@ -190,50 +209,33 @@ async function checkUsernameExists(req, res) {
 async function updateAccountLifespan(req, res) {
   try {
     const { user_id } = req.body;
-
-    const updatedUser = await UsersModel.findByIdAndUpdate(
+    const user = await UsersModel.findByIdAndUpdate(
       user_id,
-      { $set: { lifespan: 1825 } },
+      { lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000) },
       { new: true, runValidators: true }
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ error: "User not found" });
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
-    res.json(updatedUser);
+    res.json(user);
   } catch (error) {
-    console.error("Error updating account expiry date:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ error });
   }
 }
 
-
-
-
-
-cron.schedule("*/10 * * * * *", async () => {
-  try {
-    
-
-    const updated = await UsersModel.updateMany(
-      { lifespan: { $gt: 0 } },
-      { $inc: { lifespan: -1 } }
-    );
-    console.log("Updated users:", updated.modifiedCount);
-
-    const deleted = await UsersModel.deleteMany({ lifespan: { $lte: 0 } });
-    console.log("Deleted users:", deleted.deletedCount);
-
-  } catch (error) {
-    console.error("Error in lifespan cron:", error);
-  }
-});
-
-
-
-
-
-
-module.exports = {getUsers, getUser, createUser, updateUser, removeTutorial, deleteStudent, userBuy, addPoints, searchUser, checkEmailExists, checkUsernameExists, changeSettings, updateAccountLifespan
+module.exports = {
+  getUsers,
+  getUser,
+  searchUser,
+  createUser,
+  updateUser,
+  userBuy,
+  addPoints,
+  removeTutorial,
+  changeSettings,
+  deleteStudent,
+  checkEmailExists,
+  checkUsernameExists,
+  updateAccountLifespan
 };
