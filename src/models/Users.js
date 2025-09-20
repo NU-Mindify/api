@@ -76,6 +76,10 @@ const UsersSchema = new mongoose.Schema({
   items:{
     type: [String],
     default: ["bulldog", "b1", "g1", "female_unform", "male_unform"]
+  },
+  lifespan:{
+    type: Number,
+    default: 1825
   }
 }, { timestamps: true })
 
