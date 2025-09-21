@@ -67,7 +67,6 @@ async function createUser(req, res) {
   try {
     const newUser = new UsersModel({
       ...req.body,
-     
       lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000)
     });
 
@@ -206,12 +205,14 @@ async function checkUsernameExists(req, res) {
 }
 
 
-async function updateAccountLifespan(req, res) {
+async function resetLifespan(req, res) {
   try {
     const { user_id } = req.body;
-    const user = await UsersModel.findByIdAndUpdate(
+    if (!user_id) return res.status(400).json({ error: "user_id is required" });
+
+    const user = await WebUsersModel.findByIdAndUpdate(
       user_id,
-      { lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000) },
+      { $set: { lifespan: new Date(Date.now() + 1460 * 24 * 60 * 60 * 1000) } },
       { new: true, runValidators: true }
     );
 
@@ -219,8 +220,8 @@ async function updateAccountLifespan(req, res) {
 
     res.json(user);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error });
+    console.error("Error in tryUpdateTTL:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
 
@@ -237,5 +238,5 @@ module.exports = {
   deleteStudent,
   checkEmailExists,
   checkUsernameExists,
-  updateAccountLifespan
+  resetLifespan
 };
