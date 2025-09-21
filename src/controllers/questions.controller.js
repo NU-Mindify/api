@@ -14,23 +14,23 @@ async function getQuestions(req, res) {
           category: category,
           difficulty: difficulty,
           is_deleted: false,
-          isApprove: true,
-        },
+          isApprove: true
+        }
       },
       {
         $sample: {
-          size: parseInt(limit),
-        },
+          size: parseInt(limit)
+        }
       },
       {
         $project: {
           is_deleted: 0,
-          isApprove: 0,
-        },
-      },
-    ];
+          isApprove: 0
+        }
+      }
+    ]
 
-    if (difficulty && limit) {
+    if(difficulty && limit){
       const randomQuestions = await QuestionsModel.aggregate(aggregation);
       res.json(randomQuestions);
       return;
@@ -43,9 +43,10 @@ async function getQuestions(req, res) {
   }
 }
 
+
 async function getQuestionsWeb(req, res) {
   try {
-    const queries = { isApprove: true };
+    const queries = { isApprove: true }; 
 
     const { category, level } = req.query;
     if (category) queries.category = category;
@@ -55,7 +56,7 @@ async function getQuestionsWeb(req, res) {
 
     const questions = await QuestionsModel.find(queries)
       .collation({ locale: "en", strength: 2 })
-      .sort({ count: -1 });
+      .sort({ count: -1 }); 
 
     res.json(questions);
   } catch (error) {
@@ -84,6 +85,9 @@ async function getAllUnapproveQuestions(req, res) {
   }
 }
 
+
+
+
 async function getTotalQuestions(req, res) {
   try {
     const category = req.query.category;
@@ -110,6 +114,9 @@ async function getTotalQuestions(req, res) {
   }
 }
 
+
+
+
 async function getTotalDeletedQuestions(req, res) {
   try {
     const category = req.query.category;
@@ -131,6 +138,7 @@ async function getTotalDeletedQuestions(req, res) {
 
     res.json(totalQuestion);
     console.log("Total Deleted Questions:", totalQuestion);
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
@@ -151,40 +159,34 @@ async function addQuestion(req, res) {
     const saveQuestion = await newQuestion.save();
     res.status(201).json(saveQuestion);
   } catch (error) {
-    console.error(error);
-
-    if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({ error: "Duplicate question already exists" });
-    }
-
-    res.status(422).json({ error: "Unprocessable Entity" });
+    res.status(422).json({ error });
   }
 }
+
 
 async function addQuestionAdmin(req, res) {
   try {
     if (!req.body || (Array.isArray(req.body) && req.body.length === 0)) {
-      return res
-        .status(400)
-        .json({ error: "Empty body or array is not allowed" });
+      return res.status(400).json({ error: "Empty body or array is not allowed" });
     }
 
     if (Array.isArray(req.body)) {
       const questions = await QuestionsModel.insertMany(
-        req.body.map((q) => ({ ...q, isApprove: true }))
+        req.body.map(q => ({ ...q, isApprove: true }))
       );
       return res.status(201).json(questions);
     }
 
+
     const newQuestion = new QuestionsModel({ ...req.body, isApprove: true });
     const saveQuestion = await newQuestion.save();
     res.status(201).json(saveQuestion);
+
   } catch (error) {
     res.status(422).json({ error });
   }
 }
+
 
 async function updateQuestion(req, res) {
   try {
@@ -249,6 +251,9 @@ async function updateQuestion(req, res) {
   }
 }
 
+
+
+
 async function deleteQuestion(req, res) {
   try {
     const { question_id, is_deleted } = req.body;
@@ -265,6 +270,7 @@ async function deleteQuestion(req, res) {
   }
 }
 
+
 async function declineQuestion(req, res) {
   try {
     const { id } = req.params;
@@ -275,23 +281,24 @@ async function declineQuestion(req, res) {
       return res.status(404).json({ message: "Question not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Question deleted successfully", deleteQues });
+    res.status(200).json({ message: "Question deleted successfully", deleteQues });
   } catch (error) {
     console.error("Error deleting question:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
 
+
 async function approveQuestion(req, res) {
   try {
     const { id } = req.params;
+    
 
+    
     const updatedQuestion = await QuestionsModel.findByIdAndUpdate(
       id,
       { isApprove: true },
-      { new: true }
+      { new: true } 
     );
 
     if (!updatedQuestion) {
@@ -308,6 +315,11 @@ async function approveQuestion(req, res) {
   }
 }
 
+
+
+
+
+
 module.exports = {
   getQuestions,
   addQuestion,
@@ -319,5 +331,5 @@ module.exports = {
   getAllUnapproveQuestions,
   declineQuestion,
   approveQuestion,
-  addQuestionAdmin,
+  addQuestionAdmin
 };
