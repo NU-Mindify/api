@@ -187,7 +187,7 @@ async function addQuestionAdmin(req, res) {
     if (error.code === 11000) {
       return res
         .status(409)
-        .json({ error: "Duplicate question already exists" });
+        .json({ error: "Duplicate question found" });
     }
 
     res.status(422).json({ error: "Unprocessable Entity" });
