@@ -30,6 +30,7 @@ async function getLogs(req, res) {
     }
 
     const logs = await LogsModel.find(filter)
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
