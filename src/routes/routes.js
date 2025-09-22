@@ -120,5 +120,6 @@ router.post("/addBranches", branches.addBranches);
 //system logs routes
 router.get("/getLogs", logs.getLogs);
 router.post("/addLogs", logs.addLogs);
+router.get("/allActions", logs.allActions)
 
 module.exports = router;

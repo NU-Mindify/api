@@ -53,9 +53,16 @@ const addLogs = (req, res) => {
      })
 }
 
+async function allActions(req, res) {
+  try {
+    const actions = await LogsModel.distinct("action");
+    actions.sort();
+    res.json({ actions });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 
-
-
-
-module.exports = { getLogs, addLogs }
+module.exports = { getLogs, addLogs, allActions }
