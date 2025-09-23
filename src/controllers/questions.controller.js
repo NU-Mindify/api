@@ -1,5 +1,8 @@
 const QuestionsModel = require("../models/Questions");
-const { getEmbedding, calculateCosineSimilarity } = require("../services/aiService");
+const {
+  getEmbedding,
+  calculateCosineSimilarity,
+} = require("../services/aiService");
 
 async function getQuestions(req, res) {
   try {
@@ -155,9 +158,7 @@ async function addQuestion(req, res) {
     console.error(error);
 
     if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({ error: "Duplicate question found!" });
+      return res.status(409).json({ error: "Duplicate question found!" });
     }
 
     res.status(422).json({ error: "Unprocessable Entity" });
@@ -186,9 +187,7 @@ async function addQuestionAdmin(req, res) {
     console.error(error);
 
     if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({ error: "Duplicate question found!" });
+      return res.status(409).json({ error: "Duplicate question found!" });
     }
 
     res.status(422).json({ error: "Unprocessable Entity" });
@@ -317,20 +316,31 @@ async function approveQuestion(req, res) {
   }
 }
 
+// In your questions controller file on the backend
+
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
   if (!questionText || !category) {
-    return res.status(400).json({ error: "Question text and category are required." });
+    return res
+      .status(400)
+      .json({ error: "Question text and category are required." });
   }
   try {
     const newQuestionVector = await getEmbedding(questionText);
-    const existingQuestions = await QuestionsModel.find({ category }).select("question embedding");
+    const existingQuestions = await QuestionsModel.find({ category }).select(
+      "question embedding"
+    );
     let mostSimilarQuestion = null;
     let highestSimilarity = 0;
 
     for (const existingQuestion of existingQuestions) {
+      // This is the crucial check:
+      // Only perform similarity calculation if the embedding exists and is not empty.
       if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
-        const similarity = calculateCosineSimilarity(newQuestionVector, existingQuestion.embedding);
+        const similarity = calculateCosineSimilarity(
+          newQuestionVector,
+          existingQuestion.embedding
+        );
         if (similarity > highestSimilarity) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
