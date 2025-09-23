@@ -143,17 +143,28 @@ async function getTotalDeletedQuestions(req, res) {
 
 async function addQuestion(req, res) {
   try {
-    const { _id, question, meaning, tags } = req.body;
-
-    if (req.body.length === 0) {
-      return res.status(400).json({ error: "Empty array is not allowed" });
+    if (!req.body || (Array.isArray(req.body) && req.body.length === 0)) {
+      return res.status(400).json({ error: "Empty body or array is not allowed" });
     }
-    const questions = await QuestionsModel.insertMany(req.body);
-    return res.status(201).json(questions);
 
-    const newQuestion = new QuestionsModel(req.body);
-    const saveQuestion = await newQuestion.save();
-    res.status(201).json(saveQuestion);
+    let questionsToInsert = [];
+
+    if (Array.isArray(req.body)) {
+      questionsToInsert = await Promise.all(
+        req.body.map(async (q) => ({
+          ...q,
+          embedding: await getEmbedding(q.question),
+        }))
+      );
+    } else {
+      questionsToInsert = [{
+        ...req.body,
+        embedding: await getEmbedding(req.body.question),
+      }];
+    }
+
+    const questions = await QuestionsModel.insertMany(questionsToInsert);
+    return res.status(201).json(questions);
   } catch (error) {
     console.error(error);
 
@@ -173,16 +184,26 @@ async function addQuestionAdmin(req, res) {
         .json({ error: "Empty body or array is not allowed" });
     }
 
+    let questionsToInsert = [];
+
     if (Array.isArray(req.body)) {
-      const questions = await QuestionsModel.insertMany(
-        req.body.map((q) => ({ ...q, isApprove: true }))
+      questionsToInsert = await Promise.all(
+        req.body.map(async (q) => ({
+          ...q,
+          isApprove: true,
+          embedding: await getEmbedding(q.question),
+        }))
       );
-      return res.status(201).json(questions);
+    } else {
+      questionsToInsert = [{
+        ...req.body,
+        isApprove: true,
+        embedding: await getEmbedding(req.body.question),
+      }];
     }
 
-    const newQuestion = new QuestionsModel({ ...req.body, isApprove: true });
-    const saveQuestion = await newQuestion.save();
-    res.status(201).json(saveQuestion);
+    const questions = await QuestionsModel.insertMany(questionsToInsert);
+    return res.status(201).json(questions);
   } catch (error) {
     console.error(error);
 
