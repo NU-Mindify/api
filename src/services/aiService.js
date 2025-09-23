@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.JOSH_GOOGLE_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE);
 const embeddingModel = genAI.getGenerativeModel({ model: "embedding-001" });
 
 async function getEmbedding(text) {

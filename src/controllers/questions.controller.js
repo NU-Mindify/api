@@ -383,9 +383,16 @@ async function checkQuestionSimilarity(req, res) {
     console.log("[AI-CHECK] Result: No duplicate found. Responding with 200.");
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
-    // This is the block that's currently being triggered.
+    // Log the full error for debugging
     console.error("[AI-CHECK] An error occurred in the try block:", error);
-    res.status(500).json({ error: "Failed to perform AI similarity check." });
+
+    // Return the error message to the frontend for easier debugging (remove in production)
+    res.status(500).json({
+      error:
+        error.message ||
+        error.toString() ||
+        "Failed to perform AI similarity check.",
+    });
   }
 }
 
