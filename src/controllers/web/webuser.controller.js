@@ -2,19 +2,23 @@ const WebUsersModel = require("../../models/web/WebUser");
 
 async function getWebUsers(req, res) {
   try {
-    
-    const page = parseInt(req.query.page) || 1; 
-    const limit = parseInt(req.query.limit) || 5; 
 
-    
-    const skip = (page - 1) * limit;
+    const filter = {};
+    const { page, limit, branch, position } = req.query;  
+    if (branch && branch.toLowerCase() !== "all") {
+      filter.branch = branch;
+    }
+    if (position && position.toLowerCase() !== "super admin") {
+      filter.position = { $ne: "super admin" };
+    }
 
-    const webusers = await WebUsersModel.find()
-      .skip(skip)
+
+
+    const webusers = await WebUsersModel.find(filter)
+      .skip((page - 1) * limit)
       .limit(limit);
 
-    
-    const total = await WebUsersModel.countDocuments();
+    const total = await WebUsersModel.countDocuments(filter);
 
     res.json({
       page,
@@ -28,6 +32,9 @@ async function getWebUsers(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+
+
 
 
 async function getUsersByBranch(req, res) {
