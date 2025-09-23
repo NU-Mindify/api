@@ -86,7 +86,7 @@ async function generateJSON(userQuery) {
 
   User Topic: "${userQuery}"
 
-  Remember to fill in the 'label' for each node and to connect the nodes with edges. The central topic should have an id of '1'. The position of the nodes should be arranged in a clear radial structure. The value of x and y is in pixels and should be unique and does not overlap with other nodes. Specify the position of source and target handle depending on the position relevant to its parent. Do not answer topics that are not related to psychology.`;
+  Remember to fill in the 'label' for each node and to connect the nodes with edges. The central topic should have an id of '1'. The position of the nodes should be arranged in a clear radial structure. The value of x and y is in pixels and should be unique and does not overlap with other nodes. Specify the position of source and target handle depending on the position relevant to its parent. Strictly do not answer topic not related to psychology instead just put one node that has label and description of "Not psychology related topic."`;
 
   const result = await model.generateContent(prompt);
 
