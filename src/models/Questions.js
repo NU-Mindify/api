@@ -62,6 +62,17 @@ const QuestionsSchema = new mongoose.Schema({
   }
 }, {timestamps: true})
 
+QuestionsSchema.pre('save', async function(next) {
+  if (this.isModified('question')) {
+    try {
+      console.log(`[pre-save] Generating embedding for: "${this.question}"`);
+      this.embedding = await getEmbedding(this.question);
+    } catch (error) {
+      console.error('Failed to generate embedding on save:', error);
+    }
+  }
+});
+
 const QuestionsModel = mongoose.model("questions", QuestionsSchema)
 
 module.exports = QuestionsModel;
