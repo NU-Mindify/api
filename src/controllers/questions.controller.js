@@ -316,6 +316,8 @@ async function approveQuestion(req, res) {
   }
 }
 
+// In your backend questions controller file
+
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
 
@@ -327,10 +329,6 @@ async function checkQuestionSimilarity(req, res) {
 
   try {
     const newQuestionVector = await getEmbedding(questionText);
-    if (!Array.isArray(newQuestionVector)) {
-      console.error("Embedding not returned as array:", newQuestionVector);
-      return res.status(500).json({ error: "Embedding service failed." });
-    }
 
     const existingQuestions = await QuestionsModel.find({ category }).select(
       "question embedding"
@@ -340,10 +338,7 @@ async function checkQuestionSimilarity(req, res) {
     let highestSimilarity = 0;
 
     for (const existingQuestion of existingQuestions) {
-      if (
-        Array.isArray(existingQuestion.embedding) &&
-        existingQuestion.embedding.length === newQuestionVector.length
-      ) {
+      if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
         const similarity = calculateCosineSimilarity(
           newQuestionVector,
           existingQuestion.embedding
@@ -353,11 +348,6 @@ async function checkQuestionSimilarity(req, res) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
         }
-      } else {
-        console.warn(
-          "Skipping question due to missing or mismatched embedding:",
-          existingQuestion._id
-        );
       }
     }
 
@@ -373,9 +363,8 @@ async function checkQuestionSimilarity(req, res) {
 
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
-    // Add this for better debugging:
     console.error("Error in Gemini similarity check:", error);
-    res.status(500).json({ error: error.stack || error.message || "Failed to perform AI similarity check." });
+    res.status(500).json({ error: "Failed to perform AI similarity check." });
   }
 }
 
