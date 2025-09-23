@@ -55,6 +55,10 @@ const QuestionsSchema = new mongoose.Schema({
   isApprove: {
     type: Boolean,
     default: false
+  },
+  embedding: {
+    type: [Number],
+    default: []
   }
 }, {timestamps: true})
 
