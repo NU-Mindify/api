@@ -373,8 +373,9 @@ async function checkQuestionSimilarity(req, res) {
 
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
+    // Add this for better debugging:
     console.error("Error in Gemini similarity check:", error);
-    res.status(500).json({ error: error.message || "Failed to perform AI similarity check." });
+    res.status(500).json({ error: error.stack || error.message || "Failed to perform AI similarity check." });
   }
 }
 
