@@ -316,31 +316,31 @@ async function approveQuestion(req, res) {
   }
 }
 
-// In your questions controller file on the backend
-
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
+
   if (!questionText || !category) {
     return res
       .status(400)
       .json({ error: "Question text and category are required." });
   }
+
   try {
     const newQuestionVector = await getEmbedding(questionText);
     const existingQuestions = await QuestionsModel.find({ category }).select(
       "question embedding"
     );
+
     let mostSimilarQuestion = null;
     let highestSimilarity = 0;
 
     for (const existingQuestion of existingQuestions) {
-      // This is the crucial check:
-      // Only perform similarity calculation if the embedding exists and is not empty.
       if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
         const similarity = calculateCosineSimilarity(
           newQuestionVector,
           existingQuestion.embedding
         );
+
         if (similarity > highestSimilarity) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
@@ -348,7 +348,7 @@ async function checkQuestionSimilarity(req, res) {
       }
     }
 
-    const SIMILARITY_THRESHOLD = 0.95;
+    const SIMILARITY_THRESHOLD = 0.95; 
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
       return res.status(409).json({
         isDuplicate: true,
@@ -357,6 +357,7 @@ async function checkQuestionSimilarity(req, res) {
         similarityScore: highestSimilarity,
       });
     }
+
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
     console.error("Error in Gemini similarity check:", error);
