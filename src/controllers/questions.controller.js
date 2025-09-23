@@ -1,4 +1,5 @@
 const QuestionsModel = require("../models/Questions");
+const { getEmbedding, calculateCosineSimilarity } = require("../services/aiService");
 
 async function getQuestions(req, res) {
   try {
@@ -316,6 +317,43 @@ async function approveQuestion(req, res) {
   }
 }
 
+async function checkQuestionSimilarity(req, res) {
+  const { questionText, category } = req.body;
+  if (!questionText || !category) {
+    return res.status(400).json({ error: "Question text and category are required." });
+  }
+  try {
+    const newQuestionVector = await getEmbedding(questionText);
+    const existingQuestions = await QuestionsModel.find({ category }).select("question embedding");
+    let mostSimilarQuestion = null;
+    let highestSimilarity = 0;
+
+    for (const existingQuestion of existingQuestions) {
+      if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
+        const similarity = calculateCosineSimilarity(newQuestionVector, existingQuestion.embedding);
+        if (similarity > highestSimilarity) {
+          highestSimilarity = similarity;
+          mostSimilarQuestion = existingQuestion.question;
+        }
+      }
+    }
+
+    const SIMILARITY_THRESHOLD = 0.95;
+    if (highestSimilarity > SIMILARITY_THRESHOLD) {
+      return res.status(409).json({
+        isDuplicate: true,
+        message: "This question appears to be a semantic duplicate.",
+        similarQuestion: mostSimilarQuestion,
+        similarityScore: highestSimilarity,
+      });
+    }
+    res.status(200).json({ isDuplicate: false });
+  } catch (error) {
+    console.error("Error in Gemini similarity check:", error);
+    res.status(500).json({ error: "Failed to perform AI similarity check." });
+  }
+}
+
 module.exports = {
   getQuestions,
   addQuestion,
@@ -328,4 +366,5 @@ module.exports = {
   declineQuestion,
   approveQuestion,
   addQuestionAdmin,
+  checkQuestionSimilarity,
 };

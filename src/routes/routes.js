@@ -78,6 +78,7 @@ router.put("/updateQuestion/:id", questions.updateQuestion);
 router.put("/deleteQuestion/:id", questions.deleteQuestion);
 router.delete("/declineQuestion/:id", questions.declineQuestion);
 router.put("/approveQuestion/:id", questions.approveQuestion);
+router.post("/checkQuestionSimilarity", questions.checkQuestionSimilarity);
 
 
 router.get("/getLeaderboard", attempts.getLeaderboard);
