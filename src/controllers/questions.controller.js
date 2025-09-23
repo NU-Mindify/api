@@ -318,6 +318,8 @@ async function approveQuestion(req, res) {
 
 // In your backend questions controller file
 
+// In your backend questions controller file
+
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
 
@@ -328,15 +330,26 @@ async function checkQuestionSimilarity(req, res) {
   }
 
   try {
-    const newQuestionVector = await getEmbedding(questionText);
+    console.log(
+      `[AI-CHECK] Starting similarity check for category: ${category}`
+    );
 
+    console.log("[AI-CHECK] Step 1: Generating embedding for new question...");
+    const newQuestionVector = await getEmbedding(questionText);
+    console.log("[AI-CHECK] Step 1 successful: Embedding generated.");
+
+    console.log("[AI-CHECK] Step 2: Fetching existing questions from DB...");
     const existingQuestions = await QuestionsModel.find({ category }).select(
       "question embedding"
+    );
+    console.log(
+      `[AI-CHECK] Step 2 successful: Found ${existingQuestions.length} existing questions.`
     );
 
     let mostSimilarQuestion = null;
     let highestSimilarity = 0;
 
+    console.log("[AI-CHECK] Step 3: Calculating similarities...");
     for (const existingQuestion of existingQuestions) {
       if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
         const similarity = calculateCosineSimilarity(
@@ -350,9 +363,15 @@ async function checkQuestionSimilarity(req, res) {
         }
       }
     }
+    console.log(
+      `[AI-CHECK] Step 3 successful: Highest similarity found is ${highestSimilarity.toFixed(
+        4
+      )}.`
+    );
 
     const SIMILARITY_THRESHOLD = 0.95;
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
+      console.log("[AI-CHECK] Result: Duplicate found. Responding with 409.");
       return res.status(409).json({
         isDuplicate: true,
         message: "This question appears to be a semantic duplicate.",
@@ -361,9 +380,11 @@ async function checkQuestionSimilarity(req, res) {
       });
     }
 
+    console.log("[AI-CHECK] Result: No duplicate found. Responding with 200.");
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
-    console.error("Error in Gemini similarity check:", error);
+    // This is the block that's currently being triggered.
+    console.error("[AI-CHECK] An error occurred in the try block:", error);
     res.status(500).json({ error: "Failed to perform AI similarity check." });
   }
 }
