@@ -369,7 +369,7 @@ async function checkQuestionSimilarity(req, res) {
       )}.`
     );
 
-    const SIMILARITY_THRESHOLD = 0.95;
+    const SIMILARITY_THRESHOLD = 0.92;
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
       console.log("[AI-CHECK] Result: Duplicate found. Responding with 409.");
       return res.status(409).json({
@@ -383,16 +383,14 @@ async function checkQuestionSimilarity(req, res) {
     console.log("[AI-CHECK] Result: No duplicate found. Responding with 200.");
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
-    // Log the full error for debugging
     console.error("[AI-CHECK] An error occurred in the try block:", error);
 
-    // Return the error message to the frontend for easier debugging (remove in production)
-    res.status(500).json({
-      error:
-        error.message ||
-        error.toString() ||
-        "Failed to perform AI similarity check.",
-    });
+    // res.status(500).json({
+    //   error:
+    //     error.message ||
+    //     error.toString() ||
+    //     "Failed to perform AI similarity check.",
+    // });
   }
 }
 
