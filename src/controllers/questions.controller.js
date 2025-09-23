@@ -327,6 +327,11 @@ async function checkQuestionSimilarity(req, res) {
 
   try {
     const newQuestionVector = await getEmbedding(questionText);
+    if (!Array.isArray(newQuestionVector)) {
+      console.error("Embedding not returned as array:", newQuestionVector);
+      return res.status(500).json({ error: "Embedding service failed." });
+    }
+
     const existingQuestions = await QuestionsModel.find({ category }).select(
       "question embedding"
     );
@@ -335,7 +340,10 @@ async function checkQuestionSimilarity(req, res) {
     let highestSimilarity = 0;
 
     for (const existingQuestion of existingQuestions) {
-      if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
+      if (
+        Array.isArray(existingQuestion.embedding) &&
+        existingQuestion.embedding.length === newQuestionVector.length
+      ) {
         const similarity = calculateCosineSimilarity(
           newQuestionVector,
           existingQuestion.embedding
@@ -345,10 +353,15 @@ async function checkQuestionSimilarity(req, res) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
         }
+      } else {
+        console.warn(
+          "Skipping question due to missing or mismatched embedding:",
+          existingQuestion._id
+        );
       }
     }
 
-    const SIMILARITY_THRESHOLD = 0.95; 
+    const SIMILARITY_THRESHOLD = 0.95;
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
       return res.status(409).json({
         isDuplicate: true,
@@ -361,7 +374,7 @@ async function checkQuestionSimilarity(req, res) {
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
     console.error("Error in Gemini similarity check:", error);
-    res.status(500).json({ error: "Failed to perform AI similarity check." });
+    res.status(500).json({ error: error.message || "Failed to perform AI similarity check." });
   }
 }
 
