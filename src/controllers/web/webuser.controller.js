@@ -2,13 +2,33 @@ const WebUsersModel = require("../../models/web/WebUser");
 
 async function getWebUsers(req, res) {
   try {
-    const webusers = await WebUsersModel.find();
-    res.json(webusers);
+    
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 5; 
+
+    
+    const skip = (page - 1) * limit;
+
+    const webusers = await WebUsersModel.find()
+      .skip(skip)
+      .limit(limit);
+
+    
+    const total = await WebUsersModel.countDocuments();
+
+    res.json({
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      data: webusers,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error });
+    res.status(500).json({ error: error.message });
   }
 }
+
 
 async function getUsersByBranch(req, res) {
   try {

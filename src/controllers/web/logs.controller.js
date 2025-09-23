@@ -9,7 +9,6 @@ async function getLogs(req, res) {
 
     if (action) filter.action = action;
 
-    // Month filter
     if (month && !(startDate && endDate)) {
       const monthIndex = new Date(`${month} 1, 2025`).getMonth();
       filter.createdAt = {
@@ -18,7 +17,6 @@ async function getLogs(req, res) {
       };
     }
 
-    
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
