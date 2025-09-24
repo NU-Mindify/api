@@ -1,5 +1,9 @@
 const QuestionsModel = require("../models/Questions");
-const { getEmbedding, calculateCosineSimilarity } = require("../services/aiService");
+const {
+  getEmbedding,
+  calculateCosineSimilarity,
+} = require("../services/aiService");
+
 
 async function getQuestions(req, res) {
   try {
@@ -140,24 +144,33 @@ async function getTotalDeletedQuestions(req, res) {
 
 async function addQuestion(req, res) {
   try {
-    const { _id, question, meaning, tags } = req.body;
-
-    if (req.body.length === 0) {
-      return res.status(400).json({ error: "Empty array is not allowed" });
+    if (!req.body || (Array.isArray(req.body) && req.body.length === 0)) {
+      return res.status(400).json({ error: "Empty body or array is not allowed" });
     }
-    const questions = await QuestionsModel.insertMany(req.body);
-    return res.status(201).json(questions);
 
-    const newQuestion = new QuestionsModel(req.body);
-    const saveQuestion = await newQuestion.save();
-    res.status(201).json(saveQuestion);
+    let questionsToInsert = [];
+
+    if (Array.isArray(req.body)) {
+      questionsToInsert = await Promise.all(
+        req.body.map(async (q) => ({
+          ...q,
+          embedding: await getEmbedding(q.question),
+        }))
+      );
+    } else {
+      questionsToInsert = [{
+        ...req.body,
+        embedding: await getEmbedding(req.body.question),
+      }];
+    }
+
+    const questions = await QuestionsModel.insertMany(questionsToInsert);
+    return res.status(201).json(questions);
   } catch (error) {
     console.error(error);
 
     if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({ error: "Duplicate question found!" });
+      return res.status(409).json({ error: "Duplicate question found!" });
     }
 
     res.status(422).json({ error: "Unprocessable Entity" });
@@ -172,23 +185,31 @@ async function addQuestionAdmin(req, res) {
         .json({ error: "Empty body or array is not allowed" });
     }
 
+    let questionsToInsert = [];
+
     if (Array.isArray(req.body)) {
-      const questions = await QuestionsModel.insertMany(
-        req.body.map((q) => ({ ...q, isApprove: true }))
+      questionsToInsert = await Promise.all(
+        req.body.map(async (q) => ({
+          ...q,
+          isApprove: true,
+          embedding: await getEmbedding(q.question),
+        }))
       );
-      return res.status(201).json(questions);
+    } else {
+      questionsToInsert = [{
+        ...req.body,
+        isApprove: true,
+        embedding: await getEmbedding(req.body.question),
+      }];
     }
 
-    const newQuestion = new QuestionsModel({ ...req.body, isApprove: true });
-    const saveQuestion = await newQuestion.save();
-    res.status(201).json(saveQuestion);
+    const questions = await QuestionsModel.insertMany(questionsToInsert);
+    return res.status(201).json(questions);
   } catch (error) {
     console.error(error);
 
     if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({ error: "Duplicate question found!" });
+      return res.status(409).json({ error: "Duplicate question found!" });
     }
 
     res.status(422).json({ error: "Unprocessable Entity" });
@@ -319,27 +340,55 @@ async function approveQuestion(req, res) {
 
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
+
   if (!questionText || !category) {
-    return res.status(400).json({ error: "Question text and category are required." });
+    return res
+      .status(400)
+      .json({ error: "Question text and category are required." });
   }
+
   try {
+    console.log(
+      `[AI-CHECK] Starting similarity check for category: ${category}`
+    );
+
+    console.log("[AI-CHECK] Step 1: Generating embedding for new question...");
     const newQuestionVector = await getEmbedding(questionText);
-    const existingQuestions = await QuestionsModel.find({ category }).select("question embedding");
+    console.log("[AI-CHECK] Step 1 successful: Embedding generated.");
+
+    console.log("[AI-CHECK] Step 2: Fetching existing questions from DB...");
+    const existingQuestions = await QuestionsModel.find({ category }).select(
+      "question embedding"
+    );
+    console.log(
+      `[AI-CHECK] Step 2 successful: Found ${existingQuestions.length} existing questions.`
+    );
+
     let mostSimilarQuestion = null;
     let highestSimilarity = 0;
 
+    console.log("[AI-CHECK] Step 3: Calculating similarities...");
     for (const existingQuestion of existingQuestions) {
       if (existingQuestion.embedding && existingQuestion.embedding.length > 0) {
-        const similarity = calculateCosineSimilarity(newQuestionVector, existingQuestion.embedding);
+        const similarity = calculateCosineSimilarity(
+          newQuestionVector,
+          existingQuestion.embedding
+        );
         if (similarity > highestSimilarity) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
         }
       }
     }
+    console.log(
+      `[AI-CHECK] Step 3 successful: Highest similarity found is ${highestSimilarity.toFixed(
+        4
+      )}.`
+    );
 
-    const SIMILARITY_THRESHOLD = 0.95;
+    const SIMILARITY_THRESHOLD = 0.92;
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
+      console.log("[AI-CHECK] Result: Duplicate found. Responding with 409.");
       return res.status(409).json({
         isDuplicate: true,
         message: "This question appears to be a semantic duplicate.",
@@ -347,10 +396,10 @@ async function checkQuestionSimilarity(req, res) {
         similarityScore: highestSimilarity,
       });
     }
+    console.log("[AI-CHECK] Result: No duplicate found. Responding with 200.");
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
-    console.error("Error in Gemini similarity check:", error);
-    res.status(500).json({ error: "Failed to perform AI similarity check." });
+    console.error("[AI-CHECK] An error occurred in the try block:", error);
   }
 }
 
