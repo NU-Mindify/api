@@ -4,6 +4,7 @@ const {
   calculateCosineSimilarity,
 } = require("../services/aiService");
 
+
 async function getQuestions(req, res) {
   try {
     const queries = {};
@@ -337,10 +338,6 @@ async function approveQuestion(req, res) {
   }
 }
 
-// In your backend questions controller file
-
-// In your backend questions controller file
-
 async function checkQuestionSimilarity(req, res) {
   const { questionText, category } = req.body;
 
@@ -377,7 +374,6 @@ async function checkQuestionSimilarity(req, res) {
           newQuestionVector,
           existingQuestion.embedding
         );
-
         if (similarity > highestSimilarity) {
           highestSimilarity = similarity;
           mostSimilarQuestion = existingQuestion.question;
@@ -400,18 +396,10 @@ async function checkQuestionSimilarity(req, res) {
         similarityScore: highestSimilarity,
       });
     }
-
     console.log("[AI-CHECK] Result: No duplicate found. Responding with 200.");
     res.status(200).json({ isDuplicate: false });
   } catch (error) {
     console.error("[AI-CHECK] An error occurred in the try block:", error);
-
-    // res.status(500).json({
-    //   error:
-    //     error.message ||
-    //     error.toString() ||
-    //     "Failed to perform AI similarity check.",
-    // });
   }
 }
 
