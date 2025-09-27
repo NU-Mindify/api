@@ -37,6 +37,8 @@ router.get("/searchUser", users.searchUser);
 router.post("/createUser", users.createUser);
 router.post("/updateUser", users.updateUser);
 router.get("/userBuy", users.userBuy);
+router.get("/addTitle", users.addTitle);
+router.get("/equipTitle", users.equipTitle);
 router.get("/addPoints", users.addPoints);
 router.put("/deleteUser/:id", users.deleteStudent);
 router.post("/checkEmailExists", users.checkEmailExists);

@@ -81,6 +81,14 @@ const UsersSchema = new mongoose.Schema({
     type: Date, 
     required: true, 
     index: { expires: 0 } 
+  },
+  owned_titles: {
+    type: [String],
+    default: []
+  },
+  title: {
+    type: String,
+    default: ""
   }
 }, { timestamps: true })
 

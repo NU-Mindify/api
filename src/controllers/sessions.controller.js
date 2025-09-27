@@ -27,7 +27,7 @@ async function getRecentSessions(req, res) {
 
 
     const sessions = await SessionsModel.find({ user: id })
-      .sort({ createdAt: -1 })
+      .sort({ start_time: -1 })
       .limit(10);
 
     if (sessions.length === 0) {

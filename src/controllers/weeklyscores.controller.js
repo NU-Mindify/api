@@ -26,7 +26,7 @@ async function getWeeklyLeaderboard(req, res) {
     const leaderboard = await WeeklyScoresModel.find()
       .sort({ points: -1 })
       .limit(50)
-      .populate("user_id", "branch username avatar cloth")
+      .populate("user_id", "branch username avatar cloth title")
       .lean()
       .exec()
       

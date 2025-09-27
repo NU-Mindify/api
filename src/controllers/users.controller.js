@@ -112,6 +112,38 @@ async function userBuy(req, res) {
   }
 }
 
+async function addTitle(req, res) {
+  try {
+    const { user_id, title } = req.query;
+    const user = await UsersModel.findByIdAndUpdate(
+      user_id,
+      { $push: { owned_titles: title } },
+      { new: true }
+    );
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+}
+
+async function equipTitle(req, res) {
+  try {
+    const { user_id, title } = req.query;
+    const user = await UsersModel.findByIdAndUpdate(
+      user_id,
+      { $set: { title: title } },
+      { new: true }
+    );
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+}
+
 
 async function addPoints(req, res) {
   try {
@@ -238,5 +270,7 @@ module.exports = {
   deleteStudent,
   checkEmailExists,
   checkUsernameExists,
-  resetLifespan
+  resetLifespan,
+  addTitle,
+  equipTitle
 };
