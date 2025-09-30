@@ -386,7 +386,7 @@ async function checkQuestionSimilarity(req, res) {
       )}.`
     );
 
-    const SIMILARITY_THRESHOLD = 0.92;
+    const SIMILARITY_THRESHOLD = 0.85;
     if (highestSimilarity > SIMILARITY_THRESHOLD) {
       console.log("[AI-CHECK] Result: Duplicate found. Responding with 409.");
       return res.status(409).json({
