@@ -2,16 +2,29 @@
 
 async function generateMindmap(req, res) {
   try {
-    const { prompt } = req.body;
+    const { prompt:userPrompt, force, user_id } = req.body
+    const prompt = userPrompt.toLowerCase().trim();
+    // const prompt = req.body.prompt.toLowerCase().trim();
+    // const force = req.body.force;
+
+    const existingMap = await MindmapModel.findOne({prompt}).sort({updatedAt: -1});
+
+    console.log(existingMap, !force);
+    
+    if(existingMap && !force){
+      res.json(existingMap.content);
+      return;
+    }
+
     if ( !prompt ) {
       res.status(400).json({ error: "Missing body" })
       return;
     }
     
     const mindMap = await generateJSON(prompt);
-    console.log(mindMap);
+    const newMindmap = await new MindmapModel({prompt, content:mindMap, user_id}).save()
     
-    res.json(mindMap)
+    res.json(newMindmap)
   } catch (error) {
     res.status(500).json({ error })
     console.error(error);
@@ -19,7 +32,9 @@ async function generateMindmap(req, res) {
   }
 }
 
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const MindmapModel = require("../models/Mindmap");
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE);
 const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash",
