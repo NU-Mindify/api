@@ -12,7 +12,7 @@ async function generateMindmap(req, res) {
     console.log(existingMap, !force);
     
     if(existingMap && !force){
-      res.json(existingMap.content);
+      res.json(existingMap);
       return;
     }
 
@@ -23,6 +23,7 @@ async function generateMindmap(req, res) {
     
     const mindMap = await generateJSON(prompt);
     const newMindmap = await new MindmapModel({prompt, content:mindMap, user_id}).save()
+    console.log(newMindmap);
     
     res.json(newMindmap)
   } catch (error) {
