@@ -108,6 +108,7 @@ router.put("/deleteWebUser/:id", webusers.deleteWebUser);
 router.delete("/declineUser/:id", webusers.declineUser);
 router.post("/check-email", webusers.checkEmailExists);
 router.put("/tryUpdateTTL", webusers.tryUpdateTTL)
+router.get("/totalWebUsers", webusers.totalWebUsers)
 
 router.get("/getAnalytics", analytics.getAnalytics);
 router.get("/getUserAttempts", attempts.getUserAttempts);

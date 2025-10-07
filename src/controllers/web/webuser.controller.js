@@ -203,5 +203,6 @@ module.exports = {
   deleteWebUser,
   declineUser,
   checkEmailExists,
-  tryUpdateTTL
+  tryUpdateTTL,
+  totalWebUsers
 };
