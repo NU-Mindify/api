@@ -182,6 +182,17 @@ async function checkEmailExists(req, res) {
   }
 }
 
+async function totalWebUsers(req,res){
+  try{
+    const count = await WebUsersModel.countDocuments({})
+     res.status(200).json({ totalWebUsers: count });
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({ error: "total web users error"})
+  }
+}
+
 module.exports = {
   getWebUsers,
   getWebUser,
