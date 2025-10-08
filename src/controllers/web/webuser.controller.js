@@ -196,7 +196,7 @@ async function totalWebUsers(req, res) {
 async function countPendingAccounts(req, res) {
   try {
     const count = await WebUsersModel.countDocuments({ isApproved: false });
-    res.status(200).json({ totalPending: count });
+    res.json(count);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "total web users error" });
