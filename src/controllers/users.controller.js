@@ -257,6 +257,17 @@ async function resetLifespan(req, res) {
   }
 }
 
+async function countStudents(req, res) {
+  try {
+    const students = await UsersModel.countDocuments({ is_deleted: false });
+    res.json({ totalStudents: students });
+  } catch (err) {
+    console.log("Error:", err);
+    res.status(500).json({ error: "Count students error" });
+  }
+}
+
+
 module.exports = {
   getUsers,
   getUser,
@@ -272,5 +283,6 @@ module.exports = {
   checkUsernameExists,
   resetLifespan,
   addTitle,
-  equipTitle
+  equipTitle,
+  countStudents
 };

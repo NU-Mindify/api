@@ -182,14 +182,24 @@ async function checkEmailExists(req, res) {
   }
 }
 
-async function totalWebUsers(req,res){
-  try{
-    const count = await WebUsersModel.countDocuments({})
-     res.status(200).json({ totalWebUsers: count });
-  }
-  catch(err){
+async function totalWebUsers(req, res) {
+  try {
+    const count = await WebUsersModel.countDocuments({ is_delete: false });
+    res.status(200).json({ totalWebUsers: count });
+  } catch (err) {
     console.log(err);
-    res.status(500).json({ error: "total web users error"})
+    res.status(500).json({ error: "total web users error" });
+  }
+}
+
+
+async function countPendingAccounts(req, res) {
+  try {
+    const count = await WebUsersModel.countDocuments({ isApproved: false });
+    res.status(200).json({ totalPending: count });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "total web users error" });
   }
 }
 
@@ -204,5 +214,6 @@ module.exports = {
   declineUser,
   checkEmailExists,
   tryUpdateTTL,
-  totalWebUsers
+  totalWebUsers,
+  countPendingAccounts
 };
