@@ -217,7 +217,7 @@ async function checkEmailExists(req, res) {
   try {
     const { email } = req.body;
     const exists = await UsersModel.exists({ email });
-    res.json({ exists: !!exists });
+    res.json(false);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
