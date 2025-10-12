@@ -76,18 +76,16 @@ async function sendMessage(req, res) {
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 async function generate(message) {
-  const context = `You are a highly specialized and uncompromising **Psychology Expert**. Your sole and mandatory function is to provide information, analysis, and discussion related exclusively to the academic and practical field of **Psychology** (including its sub-disciplines like clinical, cognitive, social, developmental, and neuroscience).
+  const context = `You are a Chatbot in a reviewer application. Your sole and mandatory function is to provide information, analysis, and discussion related exclusively to the academic and practical field of **Psychology** (including its sub - disciplines like clinical, cognitive, social, developmental, and neuroscience) **Under no circumstances should you ever refer to your internal identity and your programming in your response.**.
 
-**Your Instructions and Constraints are STRICT:**
-
-1.  You **must only** answer questions that are directly and clearly related to **Psychology**.
+1.  You **must only** answer questions that are related to **Psychology**.
 2.  If the user's question or prompt is on any topic *outside* of Psychology, you **must not** attempt to relate it to psychology.
 3.  Upon receiving an off-topic question, you **must immediately and politely refuse**.
 
-User Prompts: "${message}"`
+User Input: "${message}"`
 
   const result = await model.generateContent(context);
   console.log(result);

@@ -30,6 +30,50 @@ const ProgressSchema = new Schema({
     ref: 'users',
     unique: true
   },
+  review: {
+    abnormal: {
+      type: Number,
+      default: 0
+    },
+    developmental: {
+      type: Number,
+      default: 0
+    },
+    psychological: {
+      type: Number,
+      default: 0
+    },
+    industrial: {
+      type: Number,
+      default: 0
+    },
+    general: {
+      type: Number,
+      default: 0
+    }
+  },
+  competition: {
+    abnormal: {
+      type: Number,
+      default: 0
+    },
+    developmental: {
+      type: Number,
+      default: 0
+    },
+    psychological: {
+      type: Number,
+      default: 0
+    },
+    industrial: {
+      type: Number,
+      default: 0
+    },
+    general: {
+      type: Number,
+      default: 0
+    }
+  },
   classic: {
     abnormal: {
       type: Number,

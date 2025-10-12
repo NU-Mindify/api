@@ -67,7 +67,7 @@ async function addAttempt(req, res) {
 
       let update = {};
       if (req.body.progressUserLevel) {
-        update.$inc = { [`classic.${category}`]: 1 };
+        update.$inc = { [`${mode}.${category}`]: 1 };
       }
 
       if (highestScore._id.equals(attempt._id)) {
@@ -81,6 +81,18 @@ async function addAttempt(req, res) {
         { new: true, upsert: true }
       );
 
+      res.json({ attempt, progress_data });
+      return;
+    }else if(mode === "review"){
+      let update = {};
+      if (req.body.progressUserLevel) {
+        update.$inc = { [`${mode}.${category}`]: 1 };
+      }
+      const progress_data = await ProgressModel.findOneAndUpdate(
+        { user_id },
+        update,
+        { new: true, upsert: true }
+      );
       res.json({ attempt, progress_data });
       return;
     }
