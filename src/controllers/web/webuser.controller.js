@@ -184,11 +184,11 @@ async function checkEmailExists(req, res) {
 
 async function totalWebUsers(req, res) {
   try {
-    const count = await WebUsersModel.countDocuments({ is_delete: false });
-    res.status(200).json({ totalWebUsers: count });
+    const data = await WebUsersModel.countDocuments({ is_deleted: false });
+    res.json({ totalUsers: data });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "total web users error" });
+    console.log("Error:", err);
+    res.status(500).json({ error: "Count students error" });
   }
 }
 
