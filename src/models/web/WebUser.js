@@ -58,7 +58,7 @@ const WebUsersSchema = new mongoose.Schema({
   theme:{
     type: String,
     required: true,
-    default: "light"
+    default: "#ffffff"
   }
   }, { timestamps: true })
 
