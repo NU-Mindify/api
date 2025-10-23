@@ -50,6 +50,7 @@ async function getUsersByBranch(req, res) {
     }
 
     res.json(usersByBranch);
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
