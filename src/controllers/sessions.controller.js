@@ -67,8 +67,26 @@ async function getAverageSession(req, res) {
   }
 }
 
+async function seeAllRecentSessions(req, res) {
+  try {
+    
+    const {user, limit = 50} = req.query
+    let search = {}
+    if(user) search.user = user
+    
+    const sessions = await SessionsModel.find(search)
+    .populate("user", "first_name last_name username")
+    .sort({ start_time: -1 })
+    .limit(limit);
+    
+    res.json(sessions)
+    
+  } catch (error) {
+   res.status(400).json({error: "Server Error"}) 
+  }
+
+}
 
 
 
-
-module.exports = {addSession, getRecentSessions, getAverageSession}
+module.exports = { addSession, getRecentSessions, getAverageSession, seeAllRecentSessions }

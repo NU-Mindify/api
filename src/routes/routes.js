@@ -49,6 +49,7 @@ router.get("/countStudents", users.countStudents)
 router.post("/addSession", sessions.addSession);
 router.get("/getRecentSessions", sessions.getRecentSessions);
 router.get("/getAverageSession", sessions.getAverageSession);
+router.get("/getAllRecentSessions", sessions.seeAllRecentSessions);
 
 router.get("/getTerms", terms.getTerms);
 router.get("/getLatestUpdatedTerm", terms.getLatestUpdatedTerm)
