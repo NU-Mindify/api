@@ -54,8 +54,12 @@ const WebUsersSchema = new mongoose.Schema({
     type: Date, 
     required: true, 
     index: { expires: 0 } 
+  },
+  theme:{
+    type: String,
+    required: true,
+    default: "#ffffff"
   }
-
   }, { timestamps: true })
 
 WebUsersSchema.pre('save', async function (next) {
